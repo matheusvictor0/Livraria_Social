@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block 'titulo' %} Cadastro {% endblock %}
+
+{% block 'conteudo' %}
+
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'usuarios/css/styles.css' %}">
+
+<div class="status-message">
+    {% if status == '0'%}
+    <div class="alert alert-success" role="alert">
+        Cadastro realizado com sucesso.
+    </div>
+    {% endif %}
+
+    {% if status == '1'%}
+    <div class="alert alert-danger" role="alert">
+        Nome e email não podem está vazios.
+    </div>
+    {% endif %}
+
+    {% if status == '2'%}
+    <div class="alert alert-danger" role="alert">
+        Sua senha deve ter pelo menos 8 caracteres.
+    </div>
+    {% endif %}
+
+    {% if status == '3'%}
+    <div class="alert alert-danger" role="alert">
+        Usuário já existe no sistema.
+    </div>
+    {% endif %}
+
+    {% if status == '4'%}
+    <div class="alert alert-danger" role="alert">
+        Erro interno do sistema.
+    </div>
+    {% endif %}
+
+    {% if status == '5'%}
+    <div class="alert alert-danger" role="alert">
+        As senhas não coindidem.
+    </div>
+    {% endif %}
+</div>
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+
+    <div class="row border rounded-5 p-3 bg-white shadow box-area">
+        <!-- LEFT AREA -->
+        <div class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box"
+            style="background: #D8C3A5;">
+            <p class="fs-2 mt-3" style="color: #E85A4F; font-weight: 700; font-size: 24px">Livraria social</p>
+            <small class="text-dark text-wrap text-center" style="font-weight: 500; font-size: 16px;">Onde as histórias
+                encontram sua voz.</small>
+            <div class="featured-image mb-3">
+                <img src="{% static 'usuarios/img/image_cadastro.png' %}" class="img-fluid" style="width: auto;">
+            </div>
+        </div>
+        <!-- RIGHT AREA -->
+        <div class="col-md-6 right-box">
+            <div class="row align-items-center justify-content-center">
+                <div class="header-text mb-4">
+                    <h1>Cadastre-se</h1>
+                </div>
+            </div>
+
+            <form method="POST">{% csrf_token %}
+                <div class="input-group mb-3">
+                    <input name="nome" type="text" class="form-control form-control-lg bg-light fs-6"
+                        placeholder="Nome">
+                </div>
+                <div class="input-group mb-3">
+                    <input name="email" type="email" class="form-control form-control-lg bg-light fs-6"
+                        placeholder="Email">
+                </div>
+                <div class="input-group mb-3">
+                    <input name="senha" type="password" class="form-control form-control-lg bg-light fs-6"
+                        placeholder="Senha">
+                </div>
+                <div class="input-group mb-3">
+                    <input name="senha_repeticao" type="password" class="form-control form-control-lg bg-light fs-6"
+                        placeholder="Repita a senha">
+                </div>
+                <div class="input-group mb-3">
+                    <input class="btn btn-lg custom-btn w-100 fs-6" type="submit" value="Cadastrar">
+                </div>
+                <div class="input-group mb-3">
+                    <a href="#" class="btn custom-btn-light btn-lg w-100 fs-6">Login</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
