@@ -1,9 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap");
-
-body {
-  font-family: "Poppins", sans-serif;
-  background: #eae7dc;
-}
 .status-message {
   text-align: center;
   margin: 0 auto;
@@ -19,12 +13,22 @@ body {
   padding: 40px 30px 40px 40px;
 }
 
+.title-logo{
+  color: var(--orange-dark); 
+  font-weight: 700; 
+  font-size: 24px
+}
+.slogan{
+  font-weight: 500; 
+  font-size: 16px;
+}
+
 .form-control {
   border-radius: 20px;
 }
 
 .form-control:focus {
-  border-color: #e98074;
+  border-color: var(--orange-light);
   box-shadow: 0 0 0 0.2rem rgba(255, 87, 51, 0.25);
 }
 
@@ -40,31 +44,27 @@ body {
 }
 
 .custom-btn,
-.custom-btn:focus,
-.custom-btn:hover {
-  background-color: #d12c20;
+.custom-btn:focus{
+  background-color: var(--orange-dark);
   color: white;
   border-color: transparent;
   box-shadow: none;
   border-radius: 20px;
   margin-top: 30px;
 }
+.custom-btn:hover{
+  background-color: #da574d;
+  color: white;
+}
 
 .custom-btn-light {
   border: 2px solid #e98074;
   border-radius: 20px;
-  color: #e85a4f;
+  color: var(--orange-dark);
 }
 .custom-btn-light:hover {
   background-color: rgb(241, 241, 241);
-  color: #e85a4f;
-}
-
-.link-register {
-  color: #e85a4f;
-}
-.link-register:hover {
-  color: #b9554d;
+  color: var(--orange-dark);
 }
 
 @media only screen and (max-width: 768px) {
