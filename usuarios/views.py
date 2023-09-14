@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from hashlib import sha256
 from django.utils import timezone
 from django.urls import reverse
+from django.utils.crypto import get_random_string
 from decouple import config
 import secrets
 from django.core.mail import send_mail
@@ -23,7 +24,7 @@ def valida_cadastro(request):
     senha = request.POST.get('senha')
     senha_repeticao = request.POST.get('senha_repeticao')
 
-    # Verificar se o email já está em uso
+    # Verifica se o email já está em uso
     if Usuario.objects.filter(email=email).exists():
         return redirect('/auth/cadastro/?status=3')
 
@@ -37,15 +38,13 @@ def valida_cadastro(request):
         return redirect('/auth/cadastro/?status=5')
 
     try:
-        # Criar um novo usuário não confirmado
+        # Cria um novo usuário não confirmado
         senha = sha256(senha.encode()).hexdigest()
         usuario = Usuario(nome=nome, senha=senha, email=email, confirmado=False)
 
-        # Gere um token de confirmação de email seguro
         token_confirmacao = secrets.token_urlsafe(32)
         usuario.token_confirmacao = token_confirmacao
 
-        # Defina a data de expiração do token (opcional)
         usuario.data_expiracao_token = timezone.now() + timezone.timedelta(hours=24)
 
         usuario.save()
@@ -64,18 +63,88 @@ def valida_cadastro(request):
 
 def confirmar_email(request, user_id, token):
     try:
-        # Procurar o usuário pelo ID
         usuario = Usuario.objects.get(id=user_id)
-
-        # Verificar se o token de confirmação corresponde
         if token != usuario.token_confirmacao:
             return HttpResponse('Token de confirmação inválido.')
-
-        # Marcar o usuário como confirmado
         usuario.confirmado = True
         usuario.save()
 
-        return redirect('/auth/login/')  # Redirecionar para a página de login após a confirmação
+        return redirect('/auth/login/')
     except Usuario.DoesNotExist:
         return HttpResponse('Usuário não encontrado.')
-    
+
+def valida_login(request):
+    email = request.POST.get('email')
+    senha = request.POST.get('senha')
+    senha = sha256(senha.encode()).hexdigest()
+
+    usuario = Usuario.objects.filter(email=email).filter(senha=senha).first()
+
+    if usuario is None:
+        return redirect('/auth/login/?status=1')
+
+    if not usuario.confirmado:
+        return redirect('/auth/login/?status=2')
+
+    request.session['usuario'] = usuario.id
+    return redirect(f'/livro/home/')
+
+
+def solicitar_redefinicao_senha(request):
+    status = request.GET.get('status')
+    usuario = None
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        try:
+            usuario = Usuario.objects.get(email=email)
+        except Usuario.DoesNotExist:
+            status = '3'
+        if usuario is not None:
+            # Gerar um token de redefinição de senha
+            token = get_random_string(length=32)
+            usuario.token_confirmacao = token
+            usuario.data_expiracao_token = timezone.now() + timezone.timedelta(hours=1)
+            usuario.save()
+
+            # Envie um email com o link de redefinição de senha
+            subject = 'Redefinir Senha'
+            message = f'Clique no link a seguir para redefinir sua senha: {request.build_absolute_uri(reverse("redefinir_senha", args=[token]))}'
+            from_email = config('EMAIL_HOST_USER')
+            recipient_list = [usuario.email]
+            send_mail(subject, message, from_email, recipient_list)
+
+            return redirect('/auth/solicitar_redefinicao_senha/?status=4')
+
+    return render(request, 'solicitar_redefinicao_senha.html', {'status': status})
+
+def redefinir_senha(request, token):
+    status = request.GET.get('status')
+
+    try:
+        usuario = Usuario.objects.get(token_confirmacao=token)
+    except Usuario.DoesNotExist:
+        return HttpResponse('Token de redefinição de senha inválido ou expirado.')
+
+    if request.method == 'POST':
+        nova_senha = request.POST.get('nova_senha')
+        senha_repeticao = request.POST.get('senha_repeticao')
+
+        if nova_senha != senha_repeticao:
+            return redirect(f'/auth/redefinir_senha/{token}/?status=1')
+
+        if len(nova_senha) < 8:
+            return redirect(f'/auth/redefinir_senha/{token}/?status=2')
+
+        # Atualize a senha do usuário
+        usuario.senha = sha256(nova_senha.encode()).hexdigest()
+        usuario.token_confirmacao = None
+        usuario.data_expiracao_token = None
+        usuario.save()
+
+        return redirect('/auth/login/')
+
+    return render(request, 'redefinir_senha.html', {'token': token, 'status': status})
+
+def sair(request):
+    request.session.flush()
+    return redirect('/auth/login/')

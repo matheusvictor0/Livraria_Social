@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Login {% endblock %}
+
+{% block 'content' %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'usuarios/css/styles.css' %}">
+{% endblock %}
+
+<div class="status-message">
+    {% if status == '1' %}
+    <div class="alert alert-danger" role="alert">
+        As senhas não coincidem.
+    </div>
+    {% endif %}
+    {% if status == '2' %}
+    <div class="alert alert-danger" role="alert">
+        A senha deve conter pelo menos 8 caracteres.
+    </div>
+    {% endif %}
+</div>
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="row align-items-center">
+        <!-- LEFT AREA -->
+        <div
+            class="col-md-5 col-12 rounded-4 justify-content-center align-items-center flex-column left-box container-reset-password">
+            <div class="featured-image mb-3">
+                <img src="{% static 'usuarios/img/Forgot-password.png' %}" class="img-fluid img-reset-password">
+            </div>
+        </div>
+
+        <!-- RIGHT AREA -->
+        <div class="col-md-7 col-12 right-box">
+            <h3 class="mb-4">Redefinir Senha</h3>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="nova_senha" class="form-label">Nova Senha</label>
+                    <input type="password" class="form-control" id="nova_senha" name="nova_senha" required>
+                </div>
+                <div class="mb-3">
+                    <label for="senha_repeticao" class="form-label">Repita a Nova Senha</label>
+                    <input type="password" class="form-control" id="senha_repeticao" name="senha_repeticao" required>
+                </div>
+                <button type="submit" class="btn custom-btn">Redefinir Senha</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
