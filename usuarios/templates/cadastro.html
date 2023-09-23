@@ -6,8 +6,18 @@
 
 {% load static %}
 
+<<<<<<< Updated upstream
 <link rel="stylesheet" href="{% static 'global/styles_global.css' %}">
 <link rel="stylesheet" href="{% static 'usuarios/css/styles.css' %}">
+=======
+{% block title %} Cadastro {% endblock %}
+
+{% block 'content' %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'usuarios/css/usuarios.css' %}">
+{% endblock %}
+>>>>>>> Stashed changes
 
 <div class="status-message">
     {% if status == '0'%}
