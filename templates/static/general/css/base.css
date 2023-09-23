@@ -237,6 +237,7 @@ body{
   z-index: 2;
   left: 0;
   width: 100%;
+
 }
 .sidebar.open ~ .home-section{
   left: 250px;

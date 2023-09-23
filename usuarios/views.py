@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from hashlib import sha256
 from django.utils import timezone
 from django.urls import reverse
+from django.utils.crypto import get_random_string
 from decouple import config
 import secrets
 from django.core.mail import send_mail
@@ -23,7 +24,7 @@ def valida_cadastro(request):
     senha = request.POST.get('senha')
     senha_repeticao = request.POST.get('senha_repeticao')
 
-    # Verificar se o email já está em uso
+    # Verifica se o email já está em uso
     if Usuario.objects.filter(email=email).exists():
         return redirect('/auth/cadastro/?status=3')
 
@@ -37,15 +38,13 @@ def valida_cadastro(request):
         return redirect('/auth/cadastro/?status=5')
 
     try:
-        # Criar um novo usuário não confirmado
+        # Cria um novo usuário não confirmado
         senha = sha256(senha.encode()).hexdigest()
         usuario = Usuario(nome=nome, senha=senha, email=email, confirmado=False)
 
-        # Gere um token de confirmação de email seguro
         token_confirmacao = secrets.token_urlsafe(32)
         usuario.token_confirmacao = token_confirmacao
 
-        # Defina a data de expiração do token (opcional)
         usuario.data_expiracao_token = timezone.now() + timezone.timedelta(hours=24)
 
         usuario.save()
@@ -64,23 +63,15 @@ def valida_cadastro(request):
 
 def confirmar_email(request, user_id, token):
     try:
-        # Procurar o usuário pelo ID
         usuario = Usuario.objects.get(id=user_id)
-
-        # Verificar se o token de confirmação corresponde
         if token != usuario.token_confirmacao:
             return HttpResponse('Token de confirmação inválido.')
-
-        # Marcar o usuário como confirmado
         usuario.confirmado = True
         usuario.save()
 
-        return redirect('/auth/login/')  # Redirecionar para a página de login após a confirmação
+        return redirect('/auth/login/')
     except Usuario.DoesNotExist:
         return HttpResponse('Usuário não encontrado.')
-<<<<<<< Updated upstream
-    
-=======
 
 def valida_login(request):
     email = request.POST.get('email')
@@ -149,12 +140,12 @@ def redefinir_senha(request, token):
         usuario.token_confirmacao = None
         usuario.data_expiracao_token = None
         usuario.save()
-
         return redirect('/auth/login/?status=3')
+
 
     return render(request, 'redefinir_senha.html', {'token': token, 'status': status})
 
 def sair(request):
     request.session.flush()
     return redirect('/auth/login/')
->>>>>>> Stashed changes
+
