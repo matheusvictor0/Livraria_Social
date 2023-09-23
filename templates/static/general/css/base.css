@@ -230,12 +230,14 @@ body{
   position: relative;
   min-height: 100vh;
   top: 0;
-  /* background: var(--beige-light); */
   left: 78px;
   color: var(--gray-dark);
   width: calc(100% - 78px);
   transition: all 0.5s ease;
   z-index: 2;
+  left: 0;
+  width: 100%;
+
 }
 .sidebar.open ~ .home-section{
   left: 250px;

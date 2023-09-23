@@ -76,7 +76,8 @@ def barra_buscar(request):
     
     categorias = categoria()
 
-    return render(request, {'livro': livro, 'categoria_livro': categorias,
+    #Mudar rederecionamento para ver_livro
+    return render(request, "home.html", {'livro': livro, 'categoria_livro': categorias,
                                                'usuario_logado': request.session.get('usuario')})
 
 
@@ -93,16 +94,19 @@ def categoria():
     return None
 
 def home(request):
-    if request.session.get('usuario'):
-        usuario = Usuario.objects.get(id = request.session['usuario'])
-        
-        #buscando a categoria
+    if 'usuario' not in request.session:
+        return redirect(f'/auth/login/?status=4')
+
+    usuario_id = request.session['usuario']
+
+    try:
+        usuario = Usuario.objects.get(id=usuario_id)
         categorias = categoria()
 
-        return render(request, 'home.html', {'categoria_livro': categorias,
-                                            'usuario_logado': usuario})
-    else:
-        return redirect('/auth/login/?status=2')
+        return render(request, 'home.html', {'categoria_livro': categorias, 'usuario_logado': usuario})
+    except Usuario.DoesNotExist:
+        return redirect(f'/auth/login/?status=4')
+
 
 
 

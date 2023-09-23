@@ -6,7 +6,7 @@
 {% block 'content' %}
 
 {% block head %}
-    <link rel="stylesheet" href="{% static 'usuarios/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'usuarios/css/usuarios.css' %}">
 {% endblock %}
 
 <div class="status-message">
@@ -18,6 +18,16 @@
     {% if status == '2'%}
     <div class="alert alert-danger" role="alert">
         Confirme o email antes de logar no sistema.
+    </div>
+    {% endif %}
+    {% if status == '3' %}
+    <div class="alert alert-success" role="alert">
+        Senha redefinida com sucesso.
+    </div>
+    {% endif %}
+    {% if status == '4'%}
+    <div class="alert alert-danger" role="alert">
+        Faça login antes de tentar acessar o sistema.
     </div>
     {% endif %}
 </div>
@@ -70,3 +80,5 @@
 
 </div>
 {% endblock %}
+
+

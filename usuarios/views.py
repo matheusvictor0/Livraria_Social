@@ -140,11 +140,12 @@ def redefinir_senha(request, token):
         usuario.token_confirmacao = None
         usuario.data_expiracao_token = None
         usuario.save()
+        return redirect('/auth/login/?status=3')
 
-        return redirect('/auth/login/')
 
     return render(request, 'redefinir_senha.html', {'token': token, 'status': status})
 
 def sair(request):
     request.session.flush()
     return redirect('/auth/login/')
+
