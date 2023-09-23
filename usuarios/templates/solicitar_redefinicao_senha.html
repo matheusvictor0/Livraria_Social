@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Login {% endblock %}
+
+{% block 'content' %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'usuarios/css/styles.css' %}">
+{% endblock %}
+
+<div class="status-message">
+    {% if status == '3'%}
+    <div class="alert alert-danger" role="alert">
+        Esse email não está cadastrado no nosso sistema.
+    </div>
+    {% endif %}
+    {% if status == '4'%}
+    <div class="alert alert-success" role="alert">
+        Solicitação enviada. Por favor, verifique seu email.
+    </div>
+    {% endif %}
+</div>
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="row align-items-center">
+        <!-- LEFT AREA -->
+        <div
+            class="col-md-5 col-12 rounded-4 justify-content-center align-items-center flex-column left-box container-reset-password">
+            <div class="featured-image mb-3">
+                <img src="{% static 'usuarios/img/Forgot-password.png' %}" class="img-fluid img-reset-password">
+            </div>
+        </div>
+
+        <!-- RIGHT AREA -->
+        <div class="col-md-7 col-12 right-box">
+
+            <h3 class="mb-4">Solicitar Redefinição de Senha</h3>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="email" class="form-label">Seu Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <button type="submit" class="btn custom-btn">Enviar Email</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
