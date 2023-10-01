@@ -76,8 +76,7 @@ def adicionar_livro(request, isbn):
                 'genero': livro_detalhes.get('genero', ''),
             }
         )
-        #mudar para a pagina ver livro
-        return redirect('home.html', isbn=livro.isbn)
+        return redirect('ver_livros', isbn=livro.isbn)
     
 #função de buscar todas a categorias
 def categoria():
@@ -105,4 +104,10 @@ def home(request):
     except Usuario.DoesNotExist:
         return redirect(f'/auth/login/?status=4')
 
-
+def ver_livros(request, isbn):
+    livro = Livros.objects.get(isbn = isbn)
+    
+    categorias = categoria()
+    
+    return render(request, 'ver_livros.html', {'livro': livro, 'categoria_livro': categorias,
+                                               'usuario_logado': request.session.get('usuario')})
