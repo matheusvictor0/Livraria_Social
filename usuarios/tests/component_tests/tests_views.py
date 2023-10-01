@@ -1,5 +1,5 @@
 from django.test import TestCase
-from ..models import Usuario
+from usuarios.models import Usuario
 from django.urls import reverse
 from hashlib import sha256
 
@@ -22,7 +22,7 @@ class UsuarioViewTestCase(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(self.client.session.get('usuario'), self.usuario.id)
-        #self.assertRedirects(response, reverse('home'))
+        self.assertRedirects(response, reverse('home'))
 
     def test_solicitar_redefinicao_senha_view(self):
         data = {

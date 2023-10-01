@@ -69,7 +69,7 @@ def confirmar_email(request, user_id, token):
         usuario.confirmado = True
         usuario.save()
 
-        return redirect('/auth/login/')
+        return redirect('/auth/login/?status=0')
     except Usuario.DoesNotExist:
         return HttpResponse('Usuário não encontrado.')
 

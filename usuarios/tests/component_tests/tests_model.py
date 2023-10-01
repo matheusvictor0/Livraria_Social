@@ -1,8 +1,8 @@
 from django.test import TestCase
-from ..models import Usuario
+from usuarios.models import Usuario
 
 class UsuarioModelTestCase(TestCase):
-    def setUp(self):
+   def setUp(self):
         Usuario.objects.create(
             nome="Maria",
             email="maria@test.com",
@@ -10,6 +10,6 @@ class UsuarioModelTestCase(TestCase):
             confirmado=False
         )
 
-    def test_return_str(self):
-        user = Usuario.objects.get(nome="Maria")
-        self.assertEquals(user.__str__(), 'Maria')
+   def test_return_str(self):
+      user = Usuario.objects.get(nome="Maria")
+      self.assertEquals(user.__str__(), 'Maria')

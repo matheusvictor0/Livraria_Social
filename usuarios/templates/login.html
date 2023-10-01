@@ -10,6 +10,11 @@
 {% endblock %}
 
 <div class="status-message">
+    {% if status == '0'%}
+    <div class="alert alert-success" role="alert">
+        Email confirmado com sucesso.
+    </div>
+    {% endif %}
     {% if status == '1'%}
     <div class="alert alert-danger" role="alert">
         Email ou senha inválidos.
