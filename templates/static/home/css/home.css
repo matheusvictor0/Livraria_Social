@@ -15,6 +15,7 @@
     padding: 5px;
     outline: none;
     background: none;
+    border-radius: 30px 0 0 30px;
 }
 
 .search-button {
@@ -40,65 +41,71 @@
     outline: none;
 }
 
-.card.card-custom {
-    width: 18rem;
-    border-radius: 15px;
+.container .busca-livros {
+    background-color: #f3f2ed;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
-.carousel-control-prev,
-.carousel-control-next {
-  background-color: var(--beige-medium);
-  width: 6vh;
-  height: 6vh;
-  border-radius: 50%;
-  top: 50%;
-  transform: translateY(-50%);
+.busca-livros .livro-container {
+    margin: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s;
+    background-size: cover;
+    background-position: center;
 }
 
-/* .carousel-inner {
-    padding: 1em;
+.busca-livros .livro-container:hover {
+    transform: scale(1.05);
 }
 
-.card {
-    margin: 0 0.5em;
-    box-shadow: 2px 6px 8px 0 rgba(22, 22, 26, 0.18);
-    border: none;
-}
-
-.img-wrapper {
-    max-width: 100%;
-    height: 65vw;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-}
-
-.img-wrapper img {
-    max-width: 100%;
-    max-height: 100%;
-}
-
-.card .img-wrapper {
-    max-width: 100%;
-    height: 13em;
+/* Estilo da sombra overlay */
+.livro-container a .livro-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Cor da sombra overlay */
+    opacity: 0; /* Inicialmente invisível */
+    transition: opacity 0.3s ease-in-out;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.card img {
-    max-height: 100%;
+
+/* Estilo de hover para a sombra overlay */
+.livro-container:hover .livro-overlay {
+    opacity: 1;
 }
 
-@media screen and (min-width: 768px) {
-    .carousel-inner {
-        margin-right: 0;
-        flex: 0 0 33.333333%;
-        display: flex;
-    }
+/* Estilo do ícone de busca na overlay */
+.busca-livros a .livro-overlay svg {
+    fill: white;
+    font-size: 24px;
+}
 
-    .carousel-item {
-        display: block;
-        margin-right: 0;
-        flex: 0 0 calc(100%/3);
-    }
-} */
+.container .busca-livros .sem-capa a{
+    text-decoration: none;
+    color: black;
+    width: 100%;
+    height: 100%;
+    font-weight: bold;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.busca-livros .sem-capa {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 130px;
+    height: 195px;
+    text-align: center;
+    background-color: #cfcfcf;
+    padding: 5px;
+    font-size: 14px;
+}
