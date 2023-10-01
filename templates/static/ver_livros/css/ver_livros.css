@@ -1,0 +1,119 @@
+.rounded-rectangle {
+    padding: 30px;
+    background-color: #f3f2ed;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.rounded-rectangle .imagem-livro {
+    height: auto;
+    width: 100%;
+}
+
+.rounded-rectangle .sem-capa-detalhes {
+    height: 350px;
+    width: 230px;
+    background-color: #cfcfcf;
+}
+
+.container-descricao {
+    margin-top: 30px;
+}
+
+.container-descricao .card-body {
+    border: 1px solid var(--beige-medium);
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.descricao-livro {
+    max-height: 150px;
+    width: auto;
+    overflow: hidden;
+    position: relative;
+    text-align: justify;
+}
+
+.ler-mais {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-radius: 30px;
+    background-color: var(--beige-medium);
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.ocultar {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-radius: 30px;
+    background-color: var(--beige-medium);
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.descricao-livro:hover .ler-mais {
+    display: block;
+}
+
+.descricao-livro:hover .ocultar {
+    display: none;
+}
+
+.card-title {
+    font-size: 28px;
+    text-transform: capitalize;
+    color: var(--orange-dark);
+}
+
+.avaliacao {
+    font-size: 14px;
+}
+
+.custom-btn,
+.custom-btn:focus {
+    background-color: var(--orange-dark);
+    color: white;
+    border-color: transparent;
+    box-shadow: none;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.custom-btn:hover {
+    background-color: #da574d;
+    color: white;
+}
+
+.form-control {
+    border-radius: 5px;
+}
+
+.form-control:focus {
+    border-color: var(--orange-light);
+    box-shadow: none;
+}
+
+::placeholder {
+    font-size: 14px;
+}
+
+.star {
+    font-size: 30px;
+    /* Tamanho da estrela */
+    cursor: pointer;
+    color: #EDAC06;
+    /* Cor das estrelas não selecionadas */
+}
+
+/* Estilo das estrelas selecionadas */
+.star.selected {
+    color: #EDAC06;
+    /* Cor das estrelas selecionadas (amarela) */
+}

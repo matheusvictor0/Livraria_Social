@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Ver Livro {% endblock %}
+
+{% block 'menu' %}
+{% include 'menu.html' %}
+{% endblock %}
+
+{% block 'content' %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'home/css/home.css' %}">
+<link rel="stylesheet" href="{% static 'ver_livros/css/ver_livros.css' %}">
+{% endblock %}
+
+<div class="container">
+
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-auto">
+            <form class="search-container" action="{% url 'buscar' %}" method="GET">
+                <input type="text" class="search-input" name="termo_pesquisa" placeholder="Pesquisar">
+                <button type="submit" class="search-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-search" viewBox="0 0 16 16">
+                        <path
+                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                    </svg>
+                </button>
+            </form>
+        </div>
+
+        <div class="col-md-3 col-3 mb-3">
+            <select class="select-categoria" name="categoria" style="max-width: 100%;">
+                <option>Categorias</option>
+                {% for i in categoria_livro %}
+                <option>{{i}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="container rounded-rectangle mt-3">
+        <div class="row">
+            <div class="col-md-3 col-6 mx-auto">
+                {% if livro.capa_url %}
+                <img src="{{ livro.capa_url }}" alt="Capa do Livro" class="img-fluid imagem-livro">
+                {% else %}
+                <div class="sem-capa-detalhes d-flex align-items-center justify-content-center text-center">
+                    <h4>CAPA INDISPONÍVEL</h4>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-md-9">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex avaliacao-left align-items-center">
+                        <p>
+                            <svg style="color:#EDAC06;" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                            </svg>
+                        <p class="ml-2 avaliacao">{{livro.avaliacao}}</p>
+                    </div>
+                    <div class="favoritar-right">
+                        <form method="POST" action="">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-favorito">
+                                {% if livro in usuario_logado.livros_favoritos.all %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                    class="bi bi-heart-fill" viewBox="0 0 16 16" style="color: var(--orange-dark);">
+                                    <path fill-rule="evenodd"
+                                        d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
+                                </svg>
+                                {% else %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                    class="bi bi-heart" viewBox="0 0 16 16" style="color: var(--orange-dark);">
+                                    <path
+                                        d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                                </svg>
+                                {% endif %}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <h5 class="card-title">{{livro.nome}}</h5>
+                <p class="card-text text-autor">{{livro.autor}}</p>
+
+                <div class="container-descricao">
+                    <div class="card-body">
+                        <div class="descricao-livro">
+                            {{livro.descricao}}
+                            <span class="ler-mais" onclick="expandirDescricao(this)">Ler mais</span>
+                            <span class="ocultar" onclick="ocultarDescricao(this)">Ocultar</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex mt-3 justify-content-end">
+                    <button id="toggleFormularioResenha" class="btn custom-btn">Adicionar Resenha</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="formularioResenha" style="display: none;" class="rounded-rectangle mt-3 mb-5">
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" class="form-control" id="titulo_resenha" name="titulo_resenha"
+                    placeholder="Título da resenha">
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" id="texto_resenha" name="texto_resenha"
+                    placeholder="Escreva sua resenha "></textarea>
+            </div>
+            <p class="mb-0 avaliacao">Avalie o livro</p>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="rating">
+                    <span class="star" data-rating="1"><i class='bx bx-star'></i></span>
+                    <span class="star" data-rating="2"><i class='bx bx-star'></i></span>
+                    <span class="star" data-rating="3"><i class='bx bx-star'></i></span>
+                    <span class="star" data-rating="4"><i class='bx bx-star'></i></span>
+                    <span class="star" data-rating="5"><i class='bx bx-star'></i></span>
+                </div>
+                <input type="hidden" name="avaliacao_resenha" id="avaliacao_resenha" value="0">
+
+                <button type="submit" class="btn custom-btn ml-2">Enviar Resenha</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<script src="{% static 'ver_livros/js/ver_livros.js' %}"></script>
+{% endblock %}

@@ -28,7 +28,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'usuarios',
-    'livro'
+    'livro',
+    'projeto_livraria',
+    
 ]
 
 MIDDLEWARE = [
