@@ -30,7 +30,7 @@
         </div>
 
         <div class="col-md-3">
-            <select class="select-categoria" name="categoria">
+            <select class="select-categoria" name="categoria" style="max-width: 100%;">
                 <option>Categorias</option>
                 {% for i in categoria_livro %}
                 <option>{{i}}</option>
@@ -39,6 +39,38 @@
         </div>
     </div>
 
+    <!-- Resultados da busca de livros -->
+    {% if request.GET.termo_pesquisa %}
+    <div class="container mt-4 p-4 busca-livros">
+        <h5>Resultados</h5>
+        <hr>
+        {% if livros %}
+        <div class="row">
+            {% for livro in livros %}
+            <div class="livro-container">
+                {% if livro.capa_url %}
+                {% if livro.isbn %}
+                <a href="{% url 'adicionar_livro' livro.isbn %}">
+                    <img src="{{ livro.capa_url }}" alt="Capa do Livro">
+                </a>
+                {% endif %}
+                {% else %}
+                <div class="sem-capa">
+                    {% if livro.isbn %}
+                    <a href="{% url 'adicionar_livro' livro.isbn %}">
+                        <p>{{ livro.titulo }}</p>
+                    </a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p>Nenhum livro encontrado para esta busca.</p>
+        {% endif %}
+    </div>
+    {% endif %}
 </div>
 
 {% endblock %}
