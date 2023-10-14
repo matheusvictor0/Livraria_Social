@@ -1,8 +1,7 @@
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from usuarios.models import Usuario
-from .models import Livros
+from .models import Livros, Resenha
 from decouple import config
 import requests
 
@@ -111,3 +110,34 @@ def ver_livros(request, isbn):
     
     return render(request, 'ver_livros.html', {'livro': livro, 'categoria_livro': categorias,
                                                'usuario_logado': request.session.get('usuario')})
+
+#Adicionar Resenha
+def adicionar_resenha(request, isbn):
+    livro = Livros.objects.get(isbn=isbn)
+    if request.method == "POST":
+        titulo_resenha = request.POST['titulo_resenha']
+        texto_resenha = request.POST['texto_resenha']
+        avaliacao_resenha = request.POST['avaliacao_resenha']
+
+        usuario = Usuario.objects.get(id = request.session['usuario']) 
+
+        # Cria a resenha associada ao livro
+        resenha = Resenha(usuario_id=usuario, livro=livro, titulo=titulo_resenha, texto=texto_resenha, avaliacao=avaliacao_resenha)
+        resenha.save()
+        
+        resenhas = Resenha.objects.filter(livro=livro)
+
+        # Calcula a nova média das avaliações
+        total_avaliacao = sum([r.avaliacao for r in resenhas])
+        numero_resenhas = len(resenhas)
+        nova_avaliacao_media = total_avaliacao / numero_resenhas
+        media_avaliacao = round(nova_avaliacao_media, 1)
+
+        # Atualiza a avaliação do livro com a nova média
+        livro.avaliacao = media_avaliacao
+        livro.save()
+        
+        categorias = categoria()
+
+        return render(request, 'ver_livros.html', {'livro': livro, 'categoria_livro': categorias,
+                                               'usuario_logado': usuario})

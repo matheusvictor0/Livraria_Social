@@ -6,5 +6,7 @@ urlpatterns = [
     path('ver_livro/<str:isbn>', views.ver_livros, name='ver_livros'),
     path('', views.barra_buscar, name='buscar'),
     path('adicionar_livro/<str:isbn>/', views.adicionar_livro, name='adicionar_livro'),
+    path('adicionar_resenha/<str:isbn>/', views.adicionar_resenha, name='adicionar_resenha'),
+
 ]
 

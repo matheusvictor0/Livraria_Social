@@ -104,16 +104,16 @@
     font-size: 14px;
 }
 
-.star {
-    font-size: 30px;
-    /* Tamanho da estrela */
+.star i{
+    color: var(--gray-light);
     cursor: pointer;
-    color: #EDAC06;
-    /* Cor das estrelas não selecionadas */
+    font-size: 20px;
+
+}
+.star i:hover {
+    transform: scale(1.2);
 }
 
-/* Estilo das estrelas selecionadas */
-.star.selected {
+.rating .star.filled i::before {
     color: #EDAC06;
-    /* Cor das estrelas selecionadas (amarela) */
 }
