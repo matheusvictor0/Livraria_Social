@@ -103,8 +103,9 @@
         </div>
     </div>
 
+    <!-- Formulario adicionar resenha para o livro -->
     <div id="formularioResenha" style="display: none;" class="rounded-rectangle mt-3 mb-5">
-        <form method="POST" action="">
+        <form method="POST" action="{% url 'adicionar_resenha' isbn=livro.isbn %}">
             {% csrf_token %}
             <div class="form-group">
                 <input type="text" class="form-control" id="titulo_resenha" name="titulo_resenha"
@@ -117,11 +118,11 @@
             <p class="mb-0 avaliacao">Avalie o livro</p>
             <div class="d-flex justify-content-between align-items-center">
                 <div class="rating">
-                    <span class="star" data-rating="1"><i class='bx bx-star'></i></span>
-                    <span class="star" data-rating="2"><i class='bx bx-star'></i></span>
-                    <span class="star" data-rating="3"><i class='bx bx-star'></i></span>
-                    <span class="star" data-rating="4"><i class='bx bx-star'></i></span>
-                    <span class="star" data-rating="5"><i class='bx bx-star'></i></span>
+                    <span class="star" data-rating="1"><i class='bx bxs-star'></i></span>
+                    <span class="star" data-rating="2"><i class='bx bxs-star'></i></span>
+                    <span class="star" data-rating="3"><i class='bx bxs-star'></i></span>
+                    <span class="star" data-rating="4"><i class='bx bxs-star'></i></span>
+                    <span class="star" data-rating="5"><i class='bx bxs-star'></i></span>
                 </div>
                 <input type="hidden" name="avaliacao_resenha" id="avaliacao_resenha" value="0">
 
@@ -129,7 +130,6 @@
             </div>
         </form>
     </div>
-
 </div>
 
 <script src="{% static 'ver_livros/js/ver_livros.js' %}"></script>
