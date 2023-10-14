@@ -13,11 +13,17 @@
     {% if status == '1' %}
     <div class="alert alert-danger" role="alert">
         As senhas não coincidem.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     {% endif %}
     {% if status == '2' %}
     <div class="alert alert-danger" role="alert">
         A senha deve conter pelo menos 8 caracteres.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     {% endif %}
 

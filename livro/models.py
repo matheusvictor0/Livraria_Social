@@ -26,3 +26,7 @@ class Resenha(models.Model):
     def __str__(self):
         return f"Comentário sobre {self.livro.nome}"
  
+class Lista_livros(models.Model):
+    nome_lista = models.CharField(max_length=100)
+    usuario_id = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    livros = models.ManyToManyField('Livros', related_name='livros_salvos')
