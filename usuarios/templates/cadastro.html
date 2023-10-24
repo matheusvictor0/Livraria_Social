@@ -11,38 +11,56 @@
 
 <div class="status-message">
     {% if status == '0'%}
-    <div class="alert alert-success" role="alert">
+    <div class="alert alert-success d-flex align-items-start" role="alert">
         Enviamos um email com um link de confirmação para o seu endereço de email. 
+        <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     {% endif %}
 
     {% if status == '1'%}
     <div class="alert alert-danger" role="alert">
         Nome e email não podem está vazios.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     {% endif %}
 
     {% if status == '2'%}
     <div class="alert alert-danger" role="alert">
         Sua senha deve ter pelo menos 8 caracteres.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     {% endif %}
 
     {% if status == '3'%}
     <div class="alert alert-danger" role="alert">
         Usuário já existe no sistema.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     {% endif %}
 
     {% if status == '4'%}
     <div class="alert alert-danger" role="alert">
         Erro interno do sistema.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     {% endif %}
 
     {% if status == '5'%}
     <div class="alert alert-danger" role="alert">
         As senhas não coindidem.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     {% endif %}
 </div>

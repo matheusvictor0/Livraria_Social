@@ -1,8 +1,9 @@
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from usuarios.models import Usuario
-from .models import Livros
+from .models import Livros, Resenha, Lista_livros
+from django.shortcuts import get_object_or_404, redirect
 from decouple import config
 import requests
 
@@ -104,10 +105,148 @@ def home(request):
     except Usuario.DoesNotExist:
         return redirect(f'/auth/login/?status=4')
 
+
 def ver_livros(request, isbn):
+    status = request.GET.get('status')
+
+    usuario = Usuario.objects.get(id = request.session['usuario']) 
     livro = Livros.objects.get(isbn = isbn)
-    
+    nome_lista = "Favoritos"
+    listas_banco = Lista_livros.objects.filter(nome_lista=nome_lista)
+
+    if listas_banco:
+        lista = Lista_livros.objects.get(nome_lista=nome_lista)
+        if lista.livros.filter(pk=livro.pk).exists():
+            favoritado = 1
+        else:
+            favoritado = 0
+    else:
+        lista = Lista_livros(nome_lista=nome_lista, usuario_id=usuario)
+        lista.save()
+        favoritado = 0
+
+    listas = Lista_livros.objects.filter(usuario_id = usuario)
     categorias = categoria()
     
     return render(request, 'ver_livros.html', {'livro': livro, 'categoria_livro': categorias,
-                                               'usuario_logado': request.session.get('usuario')})
+    'usuario_logado': usuario, 'listas': listas, 'favoritado': favoritado, 'status': status})
+
+#função de adicionar Resenha
+def adicionar_resenha(request, isbn):
+    livro = Livros.objects.get(isbn=isbn)
+    if request.method == "POST":
+        titulo_resenha = request.POST['titulo_resenha']
+        texto_resenha = request.POST['texto_resenha']
+        avaliacao_resenha = request.POST['avaliacao_resenha']
+
+        # Obtenha o usuário logado
+        usuario = Usuario.objects.get(id = request.session['usuario']) 
+
+        # Crie a resenha associada ao usuário, livro e outros detalhes
+        resenha = Resenha(usuario_id=usuario, livro=livro, titulo=titulo_resenha, texto=texto_resenha, avaliacao=avaliacao_resenha)
+        resenha.save()
+        
+         # Obtenha todas as resenhas para o livro
+        resenhas = Resenha.objects.filter(livro=livro)
+
+        # Calcule a nova média das avaliações
+        total_avaliacao = sum([r.avaliacao for r in resenhas])
+        numero_resenhas = len(resenhas)
+        nova_avaliacao_media = total_avaliacao / numero_resenhas
+        media_avaliacao = round(nova_avaliacao_media, 1)
+
+        # Atualize a avaliação do livro com a nova média
+        livro.avaliacao = media_avaliacao
+        livro.save()
+        
+        categorias = categoria()
+
+        return render(request, 'ver_livros.html', {'livro': livro, 'categoria_livro': categorias,
+                                               'usuario_logado': usuario})
+
+def salvar_livro(request, isbn):
+    status = request.GET.get('status')
+    url = reverse('ver_livros', kwargs={'isbn': isbn})
+    
+    if request.method == 'POST':
+        usuario = Usuario.objects.get(id=request.session['usuario'])
+        listas = Lista_livros.objects.filter(usuario_id=usuario)
+        nome_listas = request.POST.getlist('listas_selecionadas')
+        livro = Livros.objects.get(isbn=isbn)
+        if nome_listas:
+            for lista_id in nome_listas:
+                lista = Lista_livros.objects.get(id=lista_id)
+                lista.livros.add(livro)
+            return redirect(f'{url}?status=0')
+        else:
+            return redirect(f'{url}?status=1')
+           
+    return render(request, 'ver_livros.html', {'livro': livro, 'listas': listas, 'status': status})
+
+def criar_lista(request, isbn):
+    status = request.GET.get('status')
+    url = reverse('ver_livros', kwargs={'isbn': isbn})
+    if request.method == 'POST':
+        nome_da_lista = request.POST.get('nova_lista')
+        usuario = Usuario.objects.get(id=request.session['usuario'])
+        listas = Lista_livros.objects.filter(usuario_id=usuario)
+        livro = Livros.objects.get(isbn=isbn)
+
+        if nome_da_lista:
+            listas_banco = Lista_livros.objects.filter(nome_lista=nome_da_lista)
+            if listas_banco:
+                return redirect(f'{url}?status=2')
+            else:
+                nova_lista = Lista_livros.objects.create(nome_lista=nome_da_lista, usuario_id=usuario)
+                nova_lista.save()
+                
+                return HttpResponseRedirect(f'{url}?dropdown=open')
+
+    return render(request, 'ver_livros.html', {'livro': livro, 'listas': listas, 'usuario_logado': usuario, 'status': status})
+
+
+def favoritar_livro(request,isbn):
+    if request.method == 'POST':
+        nome = "Favoritos"
+        livro = Livros.objects.get(isbn=isbn)
+        lista = Lista_livros.objects.get(nome_lista=nome)
+        if lista.livros.filter(pk=livro.pk).exists():
+            lista.livros.remove(livro)
+        else:
+            lista.livros.add(livro)
+
+    return redirect('ver_livros', isbn=isbn)
+ 
+
+def minhas_listas(request):
+    status = request.GET.get('status')
+    usuario = request.session.get('usuario')
+    listas = Lista_livros.objects.filter(usuario_id = usuario)
+    
+    return render(request, 'minhas_listas.html', {'usuario_logado': usuario, 'listas': listas, 'status': status})
+
+def editar_lista(request, id):
+    url = reverse('minhas_listas')
+    status = request.GET.get('status')
+    if request.method == 'POST':
+        nome_novo = request.POST['nome_lista']
+        listas_banco = Lista_livros.objects.filter(nome_lista=nome_novo)
+        if listas_banco:
+            return redirect(f'{url}?status=0')
+        else:
+            lista = Lista_livros.objects.get(id=id)
+            lista.nome_lista = nome_novo
+            lista.save()
+            return redirect('minhas_listas')
+    
+    return redirect('minhas_listas', status=status)
+
+def excluir_lista(request, id):
+    if request.method == 'POST':  
+        try:
+            lista = get_object_or_404(Lista_livros, id=id)
+            lista.delete()
+            return redirect('minhas_listas')
+        except Lista_livros.DoesNotExist:
+            return redirect('minhas_listas')
+

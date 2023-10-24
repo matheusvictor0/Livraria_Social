@@ -13,26 +13,41 @@
     {% if status == '0'%}
     <div class="alert alert-success" role="alert">
         Email confirmado com sucesso.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     {% endif %}
     {% if status == '1'%}
     <div class="alert alert-danger" role="alert">
         Email ou senha inválidos.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     {% endif %}
     {% if status == '2'%}
     <div class="alert alert-danger" role="alert">
         Confirme o email antes de logar no sistema.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     {% endif %}
     {% if status == '3' %}
     <div class="alert alert-success" role="alert">
         Senha redefinida com sucesso.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     {% endif %}
     {% if status == '4'%}
     <div class="alert alert-danger" role="alert">
         Faça login antes de tentar acessar o sistema.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     {% endif %}
 </div>

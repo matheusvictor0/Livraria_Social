@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Minhas listas {% endblock %}
+
+{% block 'menu' %}
+{% include 'menu.html' %}
+{% endblock %}
+
+{% block 'content' %}
+
+<div class="status-message">
+    {% if status == '0' %}
+    <div class="alert alert-danger" role="alert">
+        Já existe uma lista com esse nome.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %}
+</div>
+{% block head %}
+<link rel="stylesheet" href="{% static 'minhas_listas/css/minhas_listas.css' %}">
+{% endblock %}
+
+<div class="container">
+    <h4 class="text-center mt-5 ml-1">Minhas Listas</h4>
+
+    <!-- Accordion para exibir as listas -->
+    <div class="accordion mt-4" id="accordionMinhasListas">
+        {% for lista in listas %}
+        <div class="card mb-2" style="border-radius: 10px;">
+            <div class="card-header" id="heading{{lista.id}}">
+                <div class="mb-0 d-flex justify-content-between align-items-center">
+                    <div class="left">
+                        <form action="{% url 'editar_lista' lista.id %}" method="POST" onsubmit="return validarForm(this);">
+                            {% csrf_token %}
+                            <input class="nome-lista" id="editarLista{{lista.id}}" name="nome_lista" disabled
+                                placeholder="{{lista.nome_lista}}">
+                            <div class="message-validation"></div>
+                        </form>
+                    </div>
+                    <div class="right d-flex">
+                        {% if lista.nome_lista != 'Favoritos' %}
+                        <button class="btn-editar mr-2" type="submit" data-lista-id="{{lista.id}}"><i class='bx bx-pencil'></i></button>
+                        <button class="btn-excluir mr-2" type="submit" data-lista-id="{{lista.id}}" data-toggle="modal" data-target="#modal-excluir-lista"><i class='bx bx-trash'></i></button>
+                        
+                        {% endif %}
+                        <button class="btn-expandir-lista" type="button" data-toggle="collapse"
+                            data-target="#collapse{{lista.id}}" aria-expanded="false"
+                            aria-controls="collapse{{lista.id}}">
+                            Ver Livros
+                            <i class='bx bx-chevron-down'></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="collapse{{lista.id}}" class="collapse" aria-labelledby="heading{{lista.id}}"
+                data-parent="#accordionMinhasListas">
+                <div class="card-body">
+                    Mostrar livros desta lista
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de confirmação para excluir lista -->
+        <div class="modal-excluir-lista">
+            <div id="fade" class="hide"></div>
+            <div id="modal" class="hide">
+                <div class="modal-header">
+                    <div class="left-header">
+                        <i class='bx bx-error alert-danger'></i>
+                        <h5 class="text-start">Excluir Lista</h5>
+                    </div>
+                    <div class="right-header">
+                        <button id="close-modal"><i class='bx bx-x'></i></button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza de que deseja excluir a lista selecionada?</p>
+                </div>
+                <div class="btn-modal d-flex justify-content-end mb-3">
+                    <button class="btn" id="cancelar-modal">Cancelar</button>
+                    <form action="{% url 'excluir_lista' lista.id %}" method="POST">
+                        {% csrf_token %}
+                        <button class="btn" type="submit" id="confirmar-modal">Excluir</button>
+                    </form>
+                                                                           
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+
+<script src="{% static 'minhas_listas/js/minhas_listas.js' %}"></script>
+
+{% endblock %}

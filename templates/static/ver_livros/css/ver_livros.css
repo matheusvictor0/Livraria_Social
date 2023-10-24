@@ -1,3 +1,29 @@
+.status-message {
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 10px;
+    max-width: 600px;
+}
+
+.btn-favorito i,
+.btn-save-list i{
+    color: var(--orange-dark);
+    font-size: 28px;
+}
+
+.right form .btn-favorito:focus,
+.right .btn-save-list:focus{
+    border-color: transparent;
+    box-shadow: none;
+    transition: 0.8s;
+}
+
+.right form .btn-favorito:hover,
+.right .btn-save-list:hover{
+    transform: scale(1.05);
+}
+
+/* Container detalhes do livro */
 .rounded-rectangle {
     padding: 30px;
     background-color: #f3f2ed;
@@ -78,11 +104,11 @@
 
 .custom-btn,
 .custom-btn:focus {
-    background-color: var(--orange-dark);
+    background-color: var(--orange-light);
     color: white;
     border-color: transparent;
     box-shadow: none;
-    border-radius: 20px;
+    border-radius: 15px;
     font-size: 14px;
 }
 
@@ -91,6 +117,7 @@
     color: white;
 }
 
+/* Container adicionar resenha */
 .form-control {
     border-radius: 5px;
 }
@@ -104,16 +131,63 @@
     font-size: 14px;
 }
 
-.star {
-    font-size: 30px;
-    /* Tamanho da estrela */
-    cursor: pointer;
-    color: #EDAC06;
-    /* Cor das estrelas não selecionadas */
+#formularioResenha input,
+#formularioResenha textarea{
+    font-size: 14px;
 }
 
-/* Estilo das estrelas selecionadas */
-.star.selected {
-    color: #EDAC06;
-    /* Cor das estrelas selecionadas (amarela) */
+.star i{
+    color: var(--gray-light);
+    cursor: pointer;
+    font-size: 20px;
+
 }
+.star i:hover {
+    transform: scale(1.2);
+}
+
+.rating .star.filled i::before {
+    color: #EDAC06;
+}
+
+/* Dropdown salvar livro em listas */
+.input-add-list{
+    border-radius: 15px;
+    height: 36px;
+    background-color: #dbdbdb;
+}
+.input-add-list:focus{
+    outline: none;
+    background-color: #dbdbdb;
+}
+
+.btn-add-list{
+    background-color: #dbdbdb;
+    height: 36px;
+    border-radius: 15px;
+}
+.btn-add-list:focus{
+    outline: none;
+    box-shadow: none;
+}
+.dropdown-menu{
+    width: 250px;
+    font-size: 14px;
+    border-radius: 10px;
+}
+.dropdown-menu .title-minhas-listas{
+    background-color: var(--orange-light);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    font-size: 16px;
+}
+.form-check-input{
+    height: 15px;
+    width: 15px;
+}
+.message-validation{
+    color: #EA2617;
+    font-size: 12px;
+    font-weight: 500;
+}
+
