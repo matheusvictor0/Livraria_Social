@@ -57,14 +57,14 @@
             </form>
         </div>
         <!-- Seletor de categorias -->
-        <div class="col-md-3 col-3 mb-3">
-            <select class="select-categoria" name="categoria" style="max-width: 100%;">
+        <form class="col-md-3 col-3 mb-3" action="{% url 'filtrar_livros' %}" method="GET" id="filtroForm">
+            <select class="select-categoria" name="categoria" style="max-width: 100%;" onchange="this.form.submit()">
                 <option>Categorias</option>
                 {% for i in categoria_livro %}
-                <option>{{i}}</option>
+                <option>{{ i }}</option>
                 {% endfor %}
             </select>
-        </div>
+        </form>
     </div>
 
     <!-- Container de detalhes do livro-->
