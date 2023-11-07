@@ -9,7 +9,7 @@ from decouple import config
 import requests
 
 def buscar_dados_livro(query):
-    api_key = config('API_KEY')
+    api_key = config('API_KEY_LIVRO')
     url = f"https://www.googleapis.com/books/v1/volumes?q={query}&key={api_key}"
     try:
         response = requests.get(url)
@@ -296,3 +296,12 @@ def excluir_lista(request, id):
         except Lista_livros.DoesNotExist:
             return redirect('minhas_listas')
 
+def excluir_livro_lista(request, isbn, id):
+    if request.method == 'POST':  
+        lista = get_object_or_404(Lista_livros, id=id)
+        livro = get_object_or_404(Livros, isbn=isbn)
+
+        # Verifica se o livro está na lista
+        if livro in lista.livros.all():
+            lista.livros.remove(livro)
+            return redirect('minhas_listas')
