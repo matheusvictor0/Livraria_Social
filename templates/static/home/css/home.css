@@ -41,7 +41,7 @@
     outline: none;
 }
 
-.container .busca-livros {
+.container-fluid .busca-livros {
     background-color: #f3f2ed;
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
@@ -67,8 +67,10 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.4); /* Cor da sombra overlay */
-    opacity: 0; /* Inicialmente invisível */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Cor da sombra overlay */
+    opacity: 0;
+    /* Inicialmente invisível */
     transition: opacity 0.3s ease-in-out;
     display: flex;
     justify-content: center;
@@ -86,7 +88,7 @@
     font-size: 24px;
 }
 
-.container .busca-livros .sem-capa a{
+.container-fluid .busca-livros .sem-capa a {
     text-decoration: none;
     color: black;
     width: 100%;

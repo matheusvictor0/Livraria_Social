@@ -2,7 +2,8 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from usuarios.models import Usuario
-from .models import Livros, Resenha, Lista_livros
+from datetime import date
+from .models import Livros, Resenha, Lista_livros, CurtidaResenha
 from django.shortcuts import get_object_or_404, redirect
 from decouple import config
 import requests
@@ -105,11 +106,25 @@ def home(request):
         return redirect(f'/auth/login/?status=4')
 
 
+def favoritar_livro(request,isbn):
+    if request.method == 'POST':
+        nome = "Favoritos"
+        livro = Livros.objects.get(isbn=isbn)
+        lista = Lista_livros.objects.get(nome_lista=nome)
+        if lista.livros.filter(pk=livro.pk).exists():
+            lista.livros.remove(livro)
+        else:
+            lista.livros.add(livro)
+
+    return redirect('ver_livros', isbn=isbn)
+ 
 def ver_livros(request, isbn):
     status = request.GET.get('status')
 
     usuario = Usuario.objects.get(id = request.session['usuario']) 
     livro = Livros.objects.get(isbn = isbn)
+    resenhas = Resenha.objects.filter(livro=livro)
+
     nome_lista = "Favoritos"
     listas_banco = Lista_livros.objects.filter(nome_lista=nome_lista)
 
@@ -124,45 +139,91 @@ def ver_livros(request, isbn):
         lista.save()
         favoritado = 0
 
+    # Calcule a nova média das avaliações
+    total_avaliacao = sum([r.avaliacao for r in resenhas])
+    numero_resenhas = len(resenhas)
+
+    if numero_resenhas > 0:
+        nova_avaliacao_media = total_avaliacao / numero_resenhas
+        media_avaliacao = round(nova_avaliacao_media, 1)
+    else:
+        media_avaliacao = 0
+        
+    # Atualize a avaliação do livro com a nova média
+    livro.avaliacao = media_avaliacao
+    livro.save()
+
     listas = Lista_livros.objects.filter(usuario_id = usuario)
     categorias = categoria()
     
     return render(request, 'ver_livros.html', {'livro': livro, 'categoria_livro': categorias,
-    'usuario_logado': usuario, 'listas': listas, 'favoritado': favoritado, 'status': status})
+    'usuario_logado': usuario, 'listas': listas, 'favoritado': favoritado, 'resenhas': resenhas, 'status': status})
 
 #função de adicionar Resenha
 def adicionar_resenha(request, isbn):
+    
     livro = Livros.objects.get(isbn=isbn)
     if request.method == "POST":
         titulo_resenha = request.POST['titulo_resenha']
         texto_resenha = request.POST['texto_resenha']
         avaliacao_resenha = request.POST['avaliacao_resenha']
-
-        # Obtenha o usuário logado
+        data = date.today()
+        
         usuario = Usuario.objects.get(id = request.session['usuario']) 
 
-        # Crie a resenha associada ao usuário, livro e outros detalhes
-        resenha = Resenha(usuario_id=usuario, livro=livro, titulo=titulo_resenha, texto=texto_resenha, avaliacao=avaliacao_resenha)
+        resenha = Resenha(usuario_id=usuario, livro=livro, titulo=titulo_resenha, texto=texto_resenha, avaliacao=avaliacao_resenha, data=data)
         resenha.save()
         
-         # Obtenha todas as resenhas para o livro
-        resenhas = Resenha.objects.filter(livro=livro)
+        return redirect('ver_livros', isbn=isbn)
 
-        # Calcule a nova média das avaliações
-        total_avaliacao = sum([r.avaliacao for r in resenhas])
-        numero_resenhas = len(resenhas)
-        nova_avaliacao_media = total_avaliacao / numero_resenhas
-        media_avaliacao = round(nova_avaliacao_media, 1)
+def curtir_resenha(request, resenha_id, isbn):
+    usuario_curtiu = False
 
-        # Atualize a avaliação do livro com a nova média
-        livro.avaliacao = media_avaliacao
-        livro.save()
-        
-        categorias = categoria()
+    if request.method == "POST":
+        resenha = Resenha.objects.get(pk=resenha_id)
+        usuario = Usuario.objects.get(id=request.session['usuario'])
+    
+        try:
+            curtida = CurtidaResenha.objects.get(usuario=usuario, resenha=resenha)
+            if curtida.curtida:
+                resenha.descurtir(usuario)
+                curtida.delete()
+            else:
+                resenha.curtir()
+                curtida.curtida = True
+                curtida.save()
+        except CurtidaResenha.DoesNotExist:
+            resenha.curtir()
+            CurtidaResenha.objects.create(usuario=usuario, resenha=resenha, curtida=True)
 
-        return render(request, 'ver_livros.html', {'livro': livro, 'categoria_livro': categorias,
-                                               'usuario_logado': usuario})
+        usuario_curtiu = resenha.user_has_liked(usuario)
+        print(usuario_curtiu)
+    
+        url = reverse('ver_livros', args=[isbn])
+        return HttpResponseRedirect(f'{url}?like={resenha.id}')
+    
+    return redirect('ver_livros', isbn=isbn)
 
+def editar_resenha(request, resenha_id):
+    if request.method == 'POST':
+        resenha = Resenha.objects.get(id=resenha_id)
+        resenha.titulo = request.POST['titulo_resenha']
+        resenha.texto = request.POST['texto_resenha']
+        resenha.avaliacao = request.POST['avaliacao_resenha']
+        resenha.save()
+
+        return redirect('ver_livros', isbn=resenha.livro.isbn)
+
+def excluir_resenha(request, resenha_id):
+    if request.method == 'POST':  
+        try:
+            resenha = Resenha.objects.get(id=resenha_id)
+            isbn = resenha.livro.isbn
+            resenha.delete()
+            return redirect('ver_livros', isbn=isbn)
+        except Lista_livros.DoesNotExist:
+            return redirect('ver_livros', isbn=isbn)
+  
 def salvar_livro(request, isbn):
     status = request.GET.get('status')
     url = reverse('ver_livros', kwargs={'isbn': isbn})
@@ -202,20 +263,6 @@ def criar_lista(request, isbn):
                 return HttpResponseRedirect(f'{url}?dropdown=open')
 
     return render(request, 'ver_livros.html', {'livro': livro, 'listas': listas, 'usuario_logado': usuario, 'status': status})
-
-
-def favoritar_livro(request,isbn):
-    if request.method == 'POST':
-        nome = "Favoritos"
-        livro = Livros.objects.get(isbn=isbn)
-        lista = Lista_livros.objects.get(nome_lista=nome)
-        if lista.livros.filter(pk=livro.pk).exists():
-            lista.livros.remove(livro)
-        else:
-            lista.livros.add(livro)
-
-    return redirect('ver_livros', isbn=isbn)
- 
 
 def minhas_listas(request):
     status = request.GET.get('status')
