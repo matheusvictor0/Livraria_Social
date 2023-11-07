@@ -16,5 +16,9 @@ urlpatterns = [
     path('excluir_lista/<str:id>/', views.excluir_lista, name='excluir_lista'),
     path('excluir_livro_lista/<str:isbn>/<int:id>', views.excluir_livro_lista, name='excluir_livro_lista'),
 
+    path('curtir_resenha/<int:resenha_id>/<str:isbn>', views.curtir_resenha, name='curtir_resenha'),
+    path('editar_resenha/<int:resenha_id>/', views.editar_resenha, name='editar_resenha'),
+    path('excluir_resenha/<int:resenha_id>/', views.excluir_resenha, name='excluir_resenha'),
+
 ]
 

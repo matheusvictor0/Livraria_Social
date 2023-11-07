@@ -129,7 +129,7 @@
                                     <p>Nenhuma lista criada</p>
                                     {% endif %}
                                     <div class="d-flex justify-content-center mx-auto mb-2 btn-save-book mb-3">
-                                        <button class="btn-sm custom-btn px-3" id="btn-salvar-lista"
+                                        <button class="btn-sm btn-ver-livro px-3" id="btn-salvar-lista"
                                             type="submit">Salvar</button>
                                     </div>
                                 </form>
@@ -176,7 +176,7 @@
                 </div>
 
                 <div class="d-flex mt-3 justify-content-end">
-                    <button id="toggleFormularioResenha" class="btn custom-btn">Adicionar Resenha</button>
+                    <button id="toggleFormularioResenha" class="btn btn-ver-livro">Adicionar Resenha</button>
                 </div>
             </div>
         </div>
@@ -205,10 +205,140 @@
                 </div>
                 <input type="hidden" name="avaliacao_resenha" id="avaliacao_resenha" value="0">
 
-                <button type="submit" class="btn custom-btn ml-2">Enviar Resenha</button>
+                <button type="submit" class="btn btn-ver-livro ml-2">Enviar Resenha</button>
             </div>
         </form>
     </div>
+
+    <!-- card para cada resenha -->
+    {% for resenha in resenhas %}
+    <div class="rounded-rectangle-resenhas my-3">
+        <div class="container-resenhas" id="resenha-{{ resenha.id }}">
+            <div class="d-flex justify-content-between align-items-start">
+                <div class="perfil-user d-flex align-items-start">
+                    <div class="img-user">
+                        <i class='bx bx-user'></i>
+                    </div>
+                    <div class="ml-3">
+                        <div class="nome-user mb-1">{{ resenha.usuario_id.nome }}</div>
+                        <h6 class="titulo-resenha">{{ resenha.titulo }}</h6>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="rating-resenha">
+                                <div class="star-resenha" data-rating="{{ resenha.avaliacao }}">
+                                    <i class='bx bxs-star'></i>
+                                    <i class='bx bxs-star'></i>
+                                    <i class='bx bxs-star'></i>
+                                    <i class='bx bxs-star'></i>
+                                    <i class='bx bxs-star'></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if resenha.usuario_id == usuario_logado %}
+                <div class="btn-group">
+                    <button type="button" class="dropdown-resenha border-0" data-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class='bx bx-dots-horizontal-rounded' style="font-size: 22px; color: gray;"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right p-2 border-0 w-auto">
+                        <button class="btn-editar dropdown-item" type="submit"
+                            data-resenha-id="{{ resenha.id }}">Editar</button>
+                        <button class="btn-excluir-resenha dropdown-item mr-2" type="submit"
+                            data-lista-id="{{resenha.id}}" data-toggle="modal-resenha"
+                            data-target="#modal-excluir-resenha" style="color: #EA2617;">Excluir</button>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <hr>
+            <div class="resenha-user mt-3">
+                <p>{{ resenha.texto }}</p>
+            </div>
+            <div class="btn-resenha d-flex justify-content-between">
+                <div class="btn-left d-flex">
+                    <form method="POST" action="{% url 'curtir_resenha' resenha.id livro.isbn %}">
+                        {% csrf_token %}
+                        <button type="submit" class="border-0 mr-1" id="like-button">
+                            {% if usuario_curtiu %}
+                            <i class='bx bxs-like'></i>
+                            {% else %}
+                            <i class='bx bx-like'></i>
+                            {% endif %}
+                        </button>
+                    </form>
+                    <p class="contagem">{{ resenha.contagem_curtidas }}</p>
+
+                    <button class="btn-comentarios d-flex align-items-start border-0 ml-4" type="submit"><i
+                            id="icon-comment" class='bx bx-comment'></i></button>
+                    <p class="contagem ml-1">{{ resenha.contagem_comentarios }}</p>
+                </div>
+
+                <p class="data-resenha">{{ resenha.data_formatada }}</p>
+
+            </div>
+        </div>
+
+        <!-- Editar resenha -->
+        {% if resenha.usuario_id == usuario_logado %}
+        <div id="editarResenha_{{ resenha.id }}" style="display: none;" class="rounded-rectangle mt-3 mb-5">
+            <form method="POST" action="{% url 'editar_resenha' resenha.id %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" class="form-control" id="titulo_resenha" name="titulo_resenha"
+                        placeholder="Novo título da resenha">
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" id="texto_resenha" name="texto_resenha"
+                        placeholder="Escreva sua nova resenha"></textarea>
+                </div>
+                <p class="mb-0 avaliacao">Avalie o livro</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="rating">
+                        <span class="star" data-rating="1"><i class='bx bxs-star'></i></span>
+                        <span class="star" data-rating="2"><i class='bx bxs-star'></i></span>
+                        <span class="star" data-rating="3"><i class='bx bxs-star'></i></span>
+                        <span class="star" data-rating="4"><i class='bx bxs-star'></i></span>
+                        <span class="star" data-rating="5"><i class='bx bxs-star'></i></span>
+                    </div>
+                    <input type="hidden" name="avaliacao_resenha" id="edit_avaliacao_resenha" value="0">
+
+                    <button type="submit" class="btn btn-ver-livro ml-2">Editar Resenha</button>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <!-- Modal de confirmação para excluir Resenha -->
+    <div class="modal-excluir-resenha">
+        <div id="fade-resenha" class="hide"></div>
+        <div id="modal-resenha" class="hide">
+            <div class="modal-header">
+                <div class="left-header">
+                    <i class='bx bx-error alert-danger'></i>
+                    <h5 class="text-start">Excluir Resenha</h5>
+                </div>
+                <div class="right-header">
+                    <button id="close-modal-resenha"><i class='bx bx-x'></i></button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza de que deseja excluir a resenha selecionada?</p>
+            </div>
+            <div class="btn-modal d-flex justify-content-end mb-3">
+                <button class="btn" id="cancelar-modal-resenha">Cancelar</button>
+                <form action="{% url 'excluir_resenha' resenha.id %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn" type="submit" id="confirmar-modal-resenha">Excluir</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+
 </div>
 
 <script src="{% static 'ver_livros/js/ver_livros.js' %}"></script>
