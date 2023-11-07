@@ -29,18 +29,18 @@
             </form>
         </div>
 
-        <div class="col-md-3 col-3 mb-3">
-            <select class="select-categoria" name="categoria" style="max-width: 100%;">
+        <form class="col-md-3 col-3 mb-3" action="{% url 'filtrar_livros' %}" method="GET" id="filtroForm">
+            <select class="select-categoria" name="categoria" style="max-width: 100%;" onchange="this.form.submit()">
                 <option>Categorias</option>
                 {% for i in categoria_livro %}
-                <option>{{i}}</option>
+                <option>{{ i }}</option>
                 {% endfor %}
             </select>
-        </div>
+        </form>
     </div>
 
     <!-- Resultados da busca de livros -->
-    {% if request.GET.termo_pesquisa %}
+    {% if request.GET.categoria and request.GET.categoria != 'Categorias' or request.GET.termo_pesquisa %}
     <div class="container mt-4 p-4 busca-livros">
         <h5>Resultados</h5>
         <hr>
@@ -49,7 +49,6 @@
             {% for livro in livros %}
             <div class="livro-container">
                 {% if livro.capa_url %}
-
                 {% if livro.isbn %}
                 <a href="{% url 'adicionar_livro' livro.isbn %}">
                     <img src="{{ livro.capa_url }}" alt="Capa do Livro" class="h-100">

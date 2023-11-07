@@ -44,6 +44,31 @@ def buscar_dados_livro(query):
 
     except requests.exceptions.RequestException as e:
         print(f"Erro na solicitação: {str(e)}")
+    
+def traduzir_texto(texto):
+    api_key = config('API_KEY_TRADUTOR')
+    url = f"https://translation.googleapis.com/language/translate/v2?key={api_key}"
+    idioma_destino='pt'
+
+    params = {
+        'q': texto,
+        'target': idioma_destino,
+    }
+
+    try:
+        response = requests.post(url, params=params)
+        response.raise_for_status()
+        data = response.json()
+
+        if 'data' in data and 'translations' in data['data']:
+            primeira_traducao = data['data']['translations'][0]
+            texto_traduzido = primeira_traducao['translatedText']
+            return texto_traduzido
+
+    except requests.exceptions.RequestException as e:
+        print(f"Erro na solicitação: {str(e)}")
+
+    return texto
 
 # Função para buscar livros por título na API
 def barra_buscar(request):
@@ -65,16 +90,17 @@ def adicionar_livro(request, isbn):
 
     if livro_data:
         livro_detalhes = livro_data[0]
-
-        # Tenta buscar o livro com base no ISBN
+        descricao_traduzida = traduzir_texto(livro_detalhes.get('descricao', ''))
+        genero_traduzido = traduzir_texto(livro_detalhes.get('genero', ''))
+        
         livro, criado = Livros.objects.get_or_create(
             isbn=isbn,
             defaults={
                 'nome': livro_detalhes.get('titulo', ''),
                 'autor': livro_detalhes.get('autores', ''),
                 'capa_url': livro_detalhes.get('capa_url', ''),
-                'descricao': livro_detalhes.get('descricao', ''),
-                'genero': livro_detalhes.get('genero', ''),
+                'descricao': descricao_traduzida,
+                'genero': genero_traduzido,
             }
         )
         return redirect('ver_livros', isbn=livro.isbn)
@@ -117,7 +143,25 @@ def favoritar_livro(request,isbn):
             lista.livros.add(livro)
 
     return redirect('ver_livros', isbn=isbn)
- 
+
+def filtrar_livros_por_categoria(request):
+    categorias = categoria()
+    
+    livros_filtrados = []
+    if request.method == 'GET':
+        categoria_pesquisar = request.GET.get('categoria')  
+        if categoria_pesquisar and categoria_pesquisar != 'Categorias':
+            livros_banco = list(Livros.objects.filter(genero=categoria_pesquisar))  
+        else:
+            livros_banco = list(Livros.objects.all())
+
+        livros_api = buscar_dados_livro(f"categories:{categoria_pesquisar}")
+        livros_filtrados = livros_api + livros_banco
+
+        return render(request, 'home.html', {'livros': livros_filtrados, 'categoria_livro': categorias})
+    else:
+        return render(request, 'home.html', {'categoria_livro': categorias})
+
 def ver_livros(request, isbn):
     status = request.GET.get('status')
 
