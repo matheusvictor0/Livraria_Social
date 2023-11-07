@@ -10,7 +10,6 @@ import requests
 def buscar_dados_livro(query):
     api_key = config('API_KEY')
     url = f"https://www.googleapis.com/books/v1/volumes?q={query}&key={api_key}"
-
     try:
         response = requests.get(url)
         response.raise_for_status()

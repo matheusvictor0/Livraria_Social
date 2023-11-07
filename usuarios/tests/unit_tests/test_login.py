@@ -11,6 +11,7 @@ class LoginTestCase(TestCase):
                                               senha=sha256(b'testpassword').hexdigest(), 
                                               confirmado=True)
         self.login_url = reverse('valida_login')
+        
 
     def test_login_success(self):
         # Criação de uma solicitação POST simulada com dados válidos
@@ -42,6 +43,9 @@ class LoginTestCase(TestCase):
         # Verifica se o login falhou devido ao usuário não confirmado
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, '/auth/login/?status=2')  # Verifica se o status 2 foi adicionado à URL de redirecionamento.
+
+  # Substitua "myapp" pelo nome real do seu aplicativo Django
+
 
 if __name__ == '__main__':
     unittest.main()
