@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from usuarios.models import Usuario
 from datetime import date
-from .models import Livros, Resenha, Lista_livros, CurtidaResenha
+from .models import Livros, Resenha, Lista_livros, CurtidaResenha, Comentarios_Resenha
 from django.shortcuts import get_object_or_404, redirect
 from decouple import config
 import requests
@@ -267,6 +267,44 @@ def excluir_resenha(request, resenha_id):
             return redirect('ver_livros', isbn=isbn)
         except Lista_livros.DoesNotExist:
             return redirect('ver_livros', isbn=isbn)
+        
+
+def comentar_resenha(request, resenha_id):
+    if request.method == "POST":
+        texto = request.POST['texto_comentario']
+        usuario = Usuario.objects.get(id = request.session['usuario']) 
+        resenha = Resenha.objects.get(pk=resenha_id)
+        data = date.today()
+        comentario = Comentarios_Resenha(usuario=usuario, resenha_id=resenha, texto=texto, data=data)
+        comentario.save()
+
+        resenha = Resenha.objects.get(id=resenha_id)
+        resenha.comentarios.add(comentario)
+        isbn = resenha.livro.isbn
+        
+        url = reverse('ver_livros', args=[isbn])
+        return HttpResponseRedirect(f'{url}?resenha={resenha_id}&comment={comentario.id}')
+
+
+    return redirect('ver_livros', isbn=isbn)
+
+def excluir_comentario(request, comentario_id):
+    if request.method == 'POST':  
+        comentario = get_object_or_404(Comentarios_Resenha, id=comentario_id)
+        isbn = comentario.resenha_id.livro.isbn
+        comentario.delete()
+
+    return redirect('ver_livros', isbn=isbn)
+    
+
+def editar_comentario(request, comentario_id):
+    if request.method == 'POST':
+        comentario = Comentarios_Resenha.objects.get(id=comentario_id)
+        comentario.texto = request.POST['texto_edit_comentario']
+        comentario.save()
+        isbn = comentario.resenha_id.livro.isbn
+
+        return redirect('ver_livros', isbn=isbn)
   
 def salvar_livro(request, isbn):
     status = request.GET.get('status')

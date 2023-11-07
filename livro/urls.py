@@ -20,6 +20,11 @@ urlpatterns = [
     path('editar_resenha/<int:resenha_id>/', views.editar_resenha, name='editar_resenha'),
     path('excluir_resenha/<int:resenha_id>/', views.excluir_resenha, name='excluir_resenha'),
 
+
     path('filtrar_livros/', views.filtrar_livros_por_categoria, name='filtrar_livros'),
-]
+
+    path('comentar_resenha/<int:resenha_id>/', views.comentar_resenha, name='comentar_resenha'),
+    path('editar_comentario/<int:comentario_id>/', views.editar_comentario, name='editar_comentario'),
+    path('excluir_comentario/<int:comentario_id>/', views.excluir_comentario, name='excluir_comentario'),
+
 
