@@ -4,6 +4,7 @@
     margin-top: 10px;
     max-width: 600px;
 }
+
 /* ACCORDION */
 .card{
     border-left: 5px solid var(--orange-light);
@@ -73,26 +74,118 @@ button {
     border-radius: 5px;
 }
 
+/* Cards livros da lista */
+.card-livro {
+    background-color: #fff;
+    width: 190px;
+    border-radius: 10px;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+}
+
+.card-livro .card-title {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.card-livro .card-subtitle {
+    font-size: 12px;
+}
+
+.card-livro .livro-container {
+    max-height: 195px;
+}
+
+.card-livro .livro-container img {
+    max-height: 100%;
+    width: auto;
+}
+
+.card-livro .livro-container .sem-capa {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 130px;
+    height: 180px;
+    text-align: center;
+    background-color: #cfcfcf;
+
+}
+
+.custom-btn,
+.custom-btn:focus {
+    /* background-color: var(--orange-light); */
+    /* border-color: transparent; */
+    /* color: white; */
+    color: #EA2617;
+    background-color: #fff;
+    border: 1px solid #EA2617;
+    box-shadow: none;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.custom-btn:hover {
+    background-color: #EA2617;
+    border-color: #EA2617;
+    color: white;
+}
+
+.btn-redirect{
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.btn-redirect svg {
+    color: var(--orange-dark);
+    transition: color 0.3s;
+}
+
+.btn-redirect:hover {
+    background-color: var(--orange-light);
+    font-size: 20px;
+    border-radius: 50%;
+}
+.btn-redirect:hover svg {
+    color: #fff;
+}
+
+.card-text a{
+    text-decoration: none;
+}
+
+
 /* MODAL EXCLUIR*/
-.btn:focus{
+.btn:focus {
     border-color: none;
     box-shadow: none;
 }
-#cancelar-modal{
+
+#cancelar-modal,
+#cancelar-modal-livro {
     border: 1px solid #000;
     border-radius: 10px;
 }
-#confirmar-modal{
+
+#confirmar-modal,
+#confirmar-modal-livro {
     border-radius: 10px;
     background-color: #EA2617;
     color: #fff;
     margin-left: .8rem;
 }
-#confirmar-modal:hover {
+
+#confirmar-modal,
+#confirmar-modal-livro:hover {
     background-color: #c92216;
 }
 
-#close-modal {
+#close-modal,
+#close-modal-livro {
     cursor: pointer;
     opacity: 0.9;
     font-size: 1.5rem;
@@ -103,7 +196,8 @@ button:hover {
     opacity: 1;
 }
 
-#fade {
+#fade,
+#fade-livro {
     position: fixed;
     top: 0;
     left: 0;
@@ -113,7 +207,8 @@ button:hover {
     z-index: 5;
 }
 
-#modal {
+#modal,
+#modal-livro {
     position: fixed;
     left: 50%;
     top: 50%;
@@ -127,7 +222,9 @@ button:hover {
 }
 
 #fade,
-#modal {
+#modal,
+#fade-livro,
+#modal-livro {
     transition: 0.5s;
     opacity: 1;
     pointer-events: all;
@@ -149,7 +246,9 @@ button:hover {
 }
 
 #modal.hide,
-#fade.hide {
+#fade.hide,
+#modal-livro.hide,
+#fade-livro.hide {
     opacity: 0;
     pointer-events: none;
 }
@@ -158,26 +257,28 @@ button:hover {
     top: 0;
 }
 
-.left-header{
+.left-header {
     display: flex;
     align-items: center;
 }
-.left-header h5{
+
+.left-header h5 {
     margin-left: 1rem;
 }
 
-.left-header i{
+.left-header i {
     font-size: 24px;
     border-radius: 50%;
     color: #EA2617;
     padding: 5px;
     margin-bottom: 5px;
 }
-.btn-modal{
+
+.btn-modal {
     padding-inline: 1.2rem;
 }
 
-.message-validation{
+.message-validation {
     color: #EA2617;
     font-size: 12px;
     font-weight: 500;
