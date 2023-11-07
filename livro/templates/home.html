@@ -10,12 +10,16 @@
 {% block 'content' %}
 
 {% block head %}
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Koulen&family=PT+Sans&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="{% static 'home/css/home.css' %}">
 {% endblock %}
 
 <div class="container-fluid">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center mb-3">
         <div class="col-md-6 col-auto">
             <form class="search-container" action="{% url 'buscar' %}" method="GET">
                 <input type="text" class="search-input" name="termo_pesquisa" placeholder="Pesquisar">
@@ -29,6 +33,7 @@
             </form>
         </div>
 
+        <!--caixa seletora com filtragem de categoria sprint 4 ou 5-->
         <form class="col-md-3 col-3 mb-3" action="{% url 'filtrar_livros' %}" method="GET" id="filtroForm">
             <select class="select-categoria" name="categoria" style="max-width: 100%;" onchange="this.form.submit()">
                 <option>Categorias</option>
@@ -37,10 +42,10 @@
                 {% endfor %}
             </select>
         </form>
+        
     </div>
-
+    {% if request.GET.categoria and request.GET.categoria != 'Categorias' or request.GET.termo_pesquisa %}   
     <!-- Resultados da busca de livros -->
-    {% if request.GET.categoria and request.GET.categoria != 'Categorias' or request.GET.termo_pesquisa %}
     <div class="container mt-4 p-4 busca-livros">
         <h5>Resultados</h5>
         <hr>
@@ -86,6 +91,53 @@
     </div>
     {% endif %}
 
+    {% for livro in livros%}
+
+    {% endfor %}
+
+    <!-- Carousel -->
+    <h4 style="font-weight: bold;">Melhores Avaliações</h4>
+    <div class="wrapper mt-3">
+        <div class="slide-wrapper" data-slide="wrapper">
+            <button class="slide-nav-button slide-nav-previous fas fa-chevron-left"
+                data-slide="nav-previous-button"></button>
+            <button class="slide-nav-button slide-nav-next fas fa-chevron-right" data-slide="nav-next-button"></button>
+            <div class="slide-list" data-slide="list">
+                {% for livro in melhores_livros %}
+                <div class="slide-item" data-slide="item" data-index="{{ forloop.counter }}">
+                    <div class="slide-content slide-{{ forloop.counter }}">
+                        <div class="img-left">
+                            {% if livro.capa_url %}
+                            <img class="slide-image" src="{{ livro.capa_url }}" alt="Capa do livro" />
+                            {% else %}
+                            <div class="sem-capa-carousel">
+                                <p>CAPA INDISPONÍVEL</p>
+                            </div>
+                            {% endif%}
+                        </div>
+                        <div class="description-right">
+                            <div class="slide-description">
+                                <p class="titulo-livro">{{ livro.nome }}</p>
+                                <p class="autor-livro">{{ livro.autor }}</p>
+                                <div class="avaliacao d-flex">
+                                    <i class='bx bxs-star' style="font-size: 22px; color: #EDAC06;"></i>
+                                    <p class="ml-2 valor-avaliacao" style="font-size: 16px; color: #fff; margin: auto;">{{livro.avaliacao}}</p>
+                                </div>
+                                <p class="resenha-livro mt-2">{{ livro.descricao}}</p>
+                                <a href="{% url 'ver_livros' livro.isbn %}" class="btn w-50 custom-btn m-auto">VER LIVRO</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="slide-controls" data-slide="controls-wrapper">
+            </div>
+        </div>
+    </div>
 </div>
+
+
+<script src="{% static 'home/js/home.js' %}"></script>
 
 {% endblock %}
