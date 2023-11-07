@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.db.models import Avg
 from usuarios.models import Usuario
 from datetime import date
 from .models import Livros, Resenha, Lista_livros, CurtidaResenha, Comentarios_Resenha
@@ -125,9 +126,16 @@ def home(request):
 
     try:
         usuario = Usuario.objects.get(id=usuario_id)
+        livros = Livros.objects.all()
         categorias = categoria()
 
-        return render(request, 'home.html', {'categoria_livro': categorias, 'usuario_logado': usuario})
+        # Calcule a média das avaliações para cada livro
+        livros = Livros.objects.annotate(avaliacao_media=Avg('resenha__avaliacao'))
+        livros = livros.order_by('-avaliacao_media')
+        # Obtem os 10 melhores
+        melhores_livros = livros[:10]
+
+        return render(request, 'home.html', {'categoria_livro': categorias, 'livros': livros, 'usuario_logado': usuario, 'melhores_livros': melhores_livros})
     except Usuario.DoesNotExist:
         return redirect(f'/auth/login/?status=4')
 

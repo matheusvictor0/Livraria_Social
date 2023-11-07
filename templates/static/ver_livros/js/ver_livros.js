@@ -6,7 +6,7 @@ document.addEventListener("input", function (e) {
 });
 
 //visibilidade do container de comentarios
-/*const btnComentarios = document.querySelectorAll(".btn-comentarios");
+const btnComentarios = document.querySelectorAll(".btn-comentarios");
 const containerComentarios = document.querySelectorAll(".container-comentarios");
 const iconComment = document.querySelectorAll("#icon-comment");
 
@@ -53,7 +53,7 @@ btnEditarComentarios.forEach((btn) => {
         toggleComentarioEdicao(comentarioId);
     });
 });
-*/
+
 
 //Visibilidade container adicionar resenha
 const buttonAddResenha = document.getElementById("toggleFormularioResenha");
@@ -158,7 +158,7 @@ confirmarModalResenha.addEventListener("click", () => {
     form.action = `/livro/excluir_resenha/${resenhaIDToDelete}/`;
 });
 
-/*const openModalComentario = document.querySelectorAll(".btn-excluir-comentario");
+const openModalComentario = document.querySelectorAll(".btn-excluir-comentario");
 const closeModalComentario = document.querySelector("#close-modal-comentario");
 const cancelarModalComentario = document.querySelector("#cancelar-modal-comentario");
 const modalComentario = document.querySelector("#modal-comentario");
@@ -186,7 +186,7 @@ confirmarModalComentario.addEventListener("click", () => {
     const form = document.querySelector("#modal-comentario form");
     form.action = `/livro/excluir_comentario/${comentarioIDToDelete}/`;
 });
-*/
+
 
 //EDITAR LIVRO- Selecionar estrelas para avaliação do livro
 const resenhas = document.querySelectorAll(".rounded-rectangle-resenhas");
