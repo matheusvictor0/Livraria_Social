@@ -177,6 +177,15 @@ def ver_livros(request, isbn):
     livro = Livros.objects.get(isbn = isbn)
     resenhas = Resenha.objects.filter(livro=livro)
 
+    curtidas = []
+    for resenha in resenhas:
+        if resenha.user_has_liked(usuario):
+            curtidas.append(True)
+        else:
+            curtidas.append(False)
+        
+    resenhas_combinada = zip(resenhas, curtidas)
+
     nome_lista = "Favoritos"
     listas_banco = Lista_livros.objects.filter(nome_lista=nome_lista)
 
@@ -209,7 +218,7 @@ def ver_livros(request, isbn):
     categorias = categoria()
     
     return render(request, 'ver_livros.html', {'livro': livro, 'categoria_livro': categorias,
-    'usuario_logado': usuario, 'listas': listas, 'favoritado': favoritado, 'resenhas': resenhas, 'status': status})
+    'usuario_logado': usuario, 'listas': listas, 'favoritado': favoritado, 'resenhas_combinada': resenhas_combinada, 'status': status})
 
 #função de adicionar Resenha
 def adicionar_resenha(request, isbn):
@@ -229,7 +238,6 @@ def adicionar_resenha(request, isbn):
         return redirect('ver_livros', isbn=isbn)
 
 def curtir_resenha(request, resenha_id, isbn):
-    usuario_curtiu = False
 
     if request.method == "POST":
         resenha = Resenha.objects.get(pk=resenha_id)
@@ -247,9 +255,6 @@ def curtir_resenha(request, resenha_id, isbn):
         except CurtidaResenha.DoesNotExist:
             resenha.curtir()
             CurtidaResenha.objects.create(usuario=usuario, resenha=resenha, curtida=True)
-
-        usuario_curtiu = resenha.user_has_liked(usuario)
-        print(usuario_curtiu)
     
         url = reverse('ver_livros', args=[isbn])
         return HttpResponseRedirect(f'{url}?like={resenha.id}')
@@ -343,7 +348,7 @@ def criar_lista(request, isbn):
         livro = Livros.objects.get(isbn=isbn)
 
         if nome_da_lista:
-            listas_banco = Lista_livros.objects.filter(nome_lista=nome_da_lista)
+            listas_banco = Lista_livros.objects.filter(nome_lista=nome_da_lista, usuario_id=usuario)
             if listas_banco:
                 return redirect(f'{url}?status=2')
             else:
