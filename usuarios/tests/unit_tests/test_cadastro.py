@@ -12,8 +12,8 @@ class CadastroTestCase(unittest.TestCase):
 #  Teste de Cadastro validando
     def test_cadastro_success(self):
         data = {
-            'nome': 'Novo Usuário',
-            'email': 'novo@example.com',
+            'nome': 'Novo Teste',
+            'email': 'novo12345@example.com',
             'senha': 'password123',
             'senha_repeticao': 'password123',
         }
@@ -21,22 +21,23 @@ class CadastroTestCase(unittest.TestCase):
         request = self.factory.post(reverse('valida_cadastro'), data)
         response = valida_cadastro(request)
         
-        # Verifica se o cadastro foi bem-sucedido e redirecionou o usuário para '/auth/cadastro/?status=0'
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, '/auth/cadastro/?status=0')
+        self.assertEqual(response.url, '/auth/cadastro/?status=0') #Retorna Status 0 (Validando)
 
         # Verifica se o usuário foi criado no banco de dados
         self.assertTrue(Usuario.objects.filter(email=data['email']).exists())
+        Usuario.objects.filter(email=data['email']).delete()
+
 
     
     #Teste para email existindo
     def test_valida_cadastro_existing_email(self):
     # Criação de um usuário com o mesmo email no banco de dados
-        Usuario.objects.create(nome='Existing User', email='usersuccess@example.com', senha='testpassword')
+        Usuario.objects.create(nome='Existing User', email='usersucesso@example.com', senha='testpassword')
 
         data = {
-            'nome': 'Usuario Teste',
-            'email': 'usersuccess@example.com',
+            'nome': 'Usuario',
+            'email': 'usersucesso@example.com',
             'senha': 'testpassword123',
             'senha_repeticao': 'testpassword123',
         }
@@ -49,8 +50,8 @@ class CadastroTestCase(unittest.TestCase):
         self.assertEqual(response.url, '/auth/cadastro/?status=3')
         
         # Verifica se nenhum novo usuário foi criado no banco de dados
-        self.assertTrue(Usuario.objects.filter(email='usersuccess@example.com').exists())
-    
+        self.assertTrue(Usuario.objects.filter(email='usersucesso@example.com').exists())
+        Usuario.objects.filter(email='usersucesso@example.com').delete()
     #Teste para senhas que não coicidem
     def test_valida_cadastro_password_mismatch(self):
             # Criação de uma solicitação POST simulada com senhas que não coincidem
@@ -71,27 +72,27 @@ class CadastroTestCase(unittest.TestCase):
 
             # Verifica se nenhum novo usuário foi criado no banco de dados
             self.assertFalse(Usuario.objects.filter(nome='Pedro Afonso').exists())
-
+            Usuario.objects.filter(nome='Pedro Afonso').delete()
     #Teste para com tudo em branco
     def test_valida_cadastro_blank_fields(self):
             # Criação de uma solicitação POST simulada com campos em branco
             data = {
-                'nome': '',
-                'email': '',
-                'senha': '',
-                'senha_repeticao': '',
+                'nome': "",
+                'email': "",
+                'senha': "",
+                'senha_repeticao': ""
             }
             request = self.factory.post(reverse('valida_cadastro'), data)
 
             # Chama a função valida_cadastro com a solicitação simulada
             response = valida_cadastro(request)
 
-            # Verifica se a resposta redireciona para a página de cadastro com status=1 (campos em branco)
             self.assertEqual(response.status_code, 302)
             self.assertEqual(response.url, '/auth/cadastro/?status=1')
 
             # Verifica se nenhum novo usuário foi criado no banco de dados
             self.assertFalse(Usuario.objects.filter(nome='').exists())
+            Usuario.objects.filter(nome='').delete()
         
     #Teste para senhas curtas
     def test_valida_cadastro_short_password(self):
@@ -114,6 +115,7 @@ class CadastroTestCase(unittest.TestCase):
         # Verifica se nenhum novo usuário foi criado no banco de dados
         user_exists = Usuario.objects.filter(email='shortpassword@example.com').exists()
         self.assertFalse(user_exists)
+        Usuario.objects.filter(email='shortpassword@example.com').delete()
 
 if __name__ == '__main__':
     unittest.main()

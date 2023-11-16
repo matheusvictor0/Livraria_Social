@@ -18,6 +18,14 @@
         </button>
     </div>
     {% endif %}
+    {% if status == '1' %}
+    <div class="alert alert-success" role="alert">
+        Livro excluído com sucesso.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %}
 </div>
 {% block head %}
 <link rel="stylesheet" href="{% static 'minhas_listas/css/minhas_listas.css' %}">
@@ -33,7 +41,8 @@
             <div class="card-header" id="heading{{lista.id}}">
                 <div class="mb-0 d-flex justify-content-between align-items-center">
                     <div class="left">
-                        <form action="{% url 'editar_lista' lista.id %}" method="POST" onsubmit="return validarForm(this);">
+                        <form action="{% url 'editar_lista' lista.id %}" method="POST"
+                            onsubmit="return validarForm(this);">
                             {% csrf_token %}
                             <input class="nome-lista" id="editarLista{{lista.id}}" name="nome_lista" disabled
                                 placeholder="{{lista.nome_lista}}">
@@ -42,9 +51,11 @@
                     </div>
                     <div class="right d-flex">
                         {% if lista.nome_lista != 'Favoritos' %}
-                        <button class="btn-editar mr-2" type="submit" data-lista-id="{{lista.id}}"><i class='bx bx-pencil'></i></button>
-                        <button class="btn-excluir mr-2" type="submit" data-lista-id="{{lista.id}}" data-toggle="modal" data-target="#modal-excluir-lista"><i class='bx bx-trash'></i></button>
-                        
+                        <button class="btn-editar mr-2" type="submit" data-lista-id="{{lista.id}}"><i
+                                class='bx bx-pencil'></i></button>
+                        <button class="btn-excluir mr-2" type="submit" data-lista-id="{{lista.id}}" data-toggle="modal"
+                            data-target="#modal-excluir-lista"><i class='bx bx-trash'></i></button>
+
                         {% endif %}
                         <button class="btn-expandir-lista" type="button" data-toggle="collapse"
                             data-target="#collapse{{lista.id}}" aria-expanded="false"
@@ -58,8 +69,55 @@
 
             <div id="collapse{{lista.id}}" class="collapse" aria-labelledby="heading{{lista.id}}"
                 data-parent="#accordionMinhasListas">
-                <div class="card-body">
-                    Mostrar livros desta lista
+                <div class="container-livros-lista p-4">
+
+                    <div class="row d-flex align-items-stretch justify-content-start">
+
+                        {% for livro in lista.livros.all %}
+                        <div class="card-livro m-2 d-flex flex-column justify-content-between">
+
+                            <div class="top px-2">
+
+                                <div class="d-flex justify-content-end p-2">
+                                    <a href="{% url 'ver_livros' livro.isbn %}" class="btn-redirect">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z" />
+                                            <path fill-rule="evenodd"
+                                                d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z" />
+                                        </svg>
+                                    </a>
+                                </div>
+
+                                <div class="livro-container d-flex justify-content-center">
+                                    {% if livro.capa_url %}
+                                    <img src="{{ livro.capa_url }}" alt="Capa do Livro">
+                                    {% else %}
+                                    <div class="sem-capa">
+                                        <p>CAPA INDISPONÍVEL</p>
+                                    </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="my-3 text-center">
+                                    <p class="card-title">{{ livro.nome }}</p>
+                                    <p class="card-subtitle">{{ livro.autor }}</p>
+                                </div>
+
+                            </div>
+
+                            <div class="card-text px-3 pb-3 text-center">
+
+                                <button class="btn-excluir-livro btn-sm custom-btn px-3 mr-2" type="submit"
+                                    data-livro-isbn-livro="{{ livro.isbn }}" data-lista-id-livro="{{ lista.id }}"
+                                    data-toggle="modal" data-target="#modal-excluir-livro-lista">
+                                    Excluir da lista
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -86,7 +144,35 @@
                         {% csrf_token %}
                         <button class="btn" type="submit" id="confirmar-modal">Excluir</button>
                     </form>
-                                                                           
+
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal de confirmação para excluir livro -->
+        <div class="modal-excluir-livro-lista">
+            <div id="fade-livro" class="hide"></div>
+            <div id="modal-livro" class="hide">
+                <div class="modal-header">
+                    <div class="left-header">
+                        <i class='bx bx-error alert-danger'></i>
+                        <h5 class="text-start">Excluir livro da lista</h5>
+                    </div>
+                    <div class="right-header">
+                        <button id="close-modal-livro"><i class='bx bx-x'></i></button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza de que deseja excluir o livro da lista selecionada?</p>
+                </div>
+                <div class="btn-modal d-flex justify-content-end mb-3">
+                    <button class="btn" id="cancelar-modal-livro">Cancelar</button>
+                    <form action="" method="POST" id="excluir-livro-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="livro_isbn" value="" id="livro-isbn-input">
+                        <input type="hidden" name="lista_id" value="" id="lista-id-input">
+                        <button class="btn" type="submit" id="confirmar-modal-livro">Excluir</button>
+                    </form>
                 </div>
             </div>
         </div>

@@ -122,7 +122,8 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 EMAIL_USE_SSL = config('EMAIL_USE_SSL', default=False, cast=bool)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-API_KEY = config('API_KEY')
+API_KEY_LIVRO = config('API_KEY_LIVRO')
+API_KEY_TRADUTOR = config('API_KEY_TRADUTOR')
 
 # DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
