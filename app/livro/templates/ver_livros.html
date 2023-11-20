@@ -211,7 +211,7 @@
     </div>
 
     <!-- card para cada resenha -->
-    {% for resenha in resenhas %}
+    {% for resenha, curtida in resenhas_combinada %}
     <div class="rounded-rectangle-resenhas my-3">
         <div class="container-resenhas" id="resenha-{{ resenha.id }}">
             <div class="d-flex justify-content-between align-items-start">
@@ -260,7 +260,7 @@
                     <form method="POST" action="{% url 'curtir_resenha' resenha.id livro.isbn %}">
                         {% csrf_token %}
                         <button type="submit" class="border-0 mr-1" id="like-button">
-                            {% if usuario_curtiu %}
+                            {% if curtida %}
                             <i class='bx bxs-like'></i>
                             {% else %}
                             <i class='bx bx-like'></i>
