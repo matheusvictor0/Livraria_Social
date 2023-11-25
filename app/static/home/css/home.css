@@ -310,14 +310,31 @@
 .slide-control-button.active {
     color: #9c9c9c;
 }
-
-@media screen and (max-width: 768px) {
-    .slide-item {
-        width: 70vw;
+/* @media screen and (max-width: 768px) */
+@media only screen and (max-width: 600px){
+    .slide-list {
+        height: 100%;
     }
-
+    .slide-item {
+        width: 60vw;
+        padding-top: 100px;
+        height: 100%;
+    }
+    
+    .slide-content{
+        display: block;
+        height: 100%;
+    }
+    .slide-description{
+        padding-top: 100px;
+    }
+    .slide-description .titulo-livro{
+        margin-top: 120px;
+    }
     .slide-image {
-        width: 180px;
+        width: 150px;
+        top: -100px;
+        left: 20px;
     }
 
     .img-left {
@@ -353,4 +370,87 @@
     .slide-nav-next {
         right: 10px;
     }
+
+    /* Resenhas mais populares */
+    .container-fluid .rounded-rectangle-resenhas {
+        /* border-left: 5px solid var(--orange-light); */
+        background-color: #f3f2ed;
+        border-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+        padding: 1rem;
+    }
+    
+    .rounded-rectangle-resenhas img {
+        height: 150px;
+    }
+    
+    .rounded-rectangle-resenhas p {
+        font-size: .9em;
+    }
+    
+    .resenha-livro {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        line-height: 22px;
+        max-height: 145px;
+        -webkit-line-clamp: 6;
+        -webkit-box-orient: vertical;
+    }
+    
+    .btn-ver-mais,
+    .btn-ver-mais:focus {
+        background-color: var(--orange-light);
+        color: white;
+        border-color: transparent;
+        box-shadow: none;
+        border-radius: 15px;
+        font-size: 14px;
+    }
+    
+    .btn-ver-mais:hover {
+        background-color: #da574d;
+        color: white;
+    }
 }
+/* .slide-item {
+    width: 70vw;
+}
+
+.slide-image {
+    width: 180px;
+}
+
+.img-left {
+    flex: 45%;
+}
+
+.description-right {
+    flex: 55%;
+}
+
+.slide-description {
+    padding: 30px 10px 35px 10px;
+}
+
+.slide-description .titulo-livro {
+    font-size: 20px;
+}
+
+.slide-description .resenha-livro {
+    max-height: 60px;
+    -webkit-line-clamp: 4;
+}
+
+.slide-nav-button {
+    margin-top: -20px;
+    font-size: 28px;
+}
+
+.slide-nav-previous {
+    left: 10px;
+}
+
+.slide-nav-next {
+    right: 10px;
+} */

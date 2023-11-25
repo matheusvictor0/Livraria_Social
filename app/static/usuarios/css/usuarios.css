@@ -99,7 +99,7 @@
   color: var(--orange-dark);
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 600px) {
   .box-area {
     margin: 0 10px;
   }
