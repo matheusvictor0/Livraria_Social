@@ -26,5 +26,4 @@ urlpatterns = [
     path('editar_comentario/<int:comentario_id>/', views.editar_comentario, name='editar_comentario'),
     path('excluir_comentario/<int:comentario_id>/', views.excluir_comentario, name='excluir_comentario'),
 
-    path('minhas_resenhas/', views.minhas_resenhas, name='minhas_resenhas'),
 ]

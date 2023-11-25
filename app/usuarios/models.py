@@ -10,5 +10,5 @@ class Usuario(models.Model):
     # Campo de confirmação de email
     confirmado = models.BooleanField(default=False)
 
-    class Meta:
-        db_table = 'Usuario'
+    def __str__(self) -> str:
+        return self.nome

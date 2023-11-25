@@ -34,7 +34,7 @@
         </div>
 
         <!--caixa seletora com filtragem de categoria sprint 4 ou 5-->
-        <form class="col-md-3 col-6 mb-3" action="{% url 'filtrar_livros' %}" method="GET" id="filtroForm">
+        <form class="col-md-3 col-3 mb-3" action="{% url 'filtrar_livros' %}" method="GET" id="filtroForm">
             <select class="select-categoria" name="categoria" style="max-width: 100%;" onchange="this.form.submit()">
                 <option>Categorias</option>
                 {% for i in categoria_livro %}
@@ -42,9 +42,9 @@
                 {% endfor %}
             </select>
         </form>
-
+        
     </div>
-    {% if request.GET.categoria and request.GET.categoria != 'Categorias' or request.GET.termo_pesquisa %}
+    {% if request.GET.categoria and request.GET.categoria != 'Categorias' or request.GET.termo_pesquisa %}   
     <!-- Resultados da busca de livros -->
     <div class="container mt-4 p-4 busca-livros">
         <h5>Resultados</h5>
@@ -96,8 +96,8 @@
     {% endfor %}
 
     <!-- Carousel -->
-    <h4 style="font-weight: bold; text-align: center;">Melhores Avaliações</h4>
-    <div class="wrapper mt-4">
+    <h4 style="font-weight: bold;">Melhores Avaliações</h4>
+    <div class="wrapper mt-3">
         <div class="slide-wrapper" data-slide="wrapper">
             <button class="slide-nav-button slide-nav-previous fas fa-chevron-left"
                 data-slide="nav-previous-button"></button>
@@ -121,12 +121,10 @@
                                 <p class="autor-livro">{{ livro.autor }}</p>
                                 <div class="avaliacao d-flex">
                                     <i class='bx bxs-star' style="font-size: 22px; color: #EDAC06;"></i>
-                                    <p class="ml-2 valor-avaliacao" style="font-size: 16px; color: #fff; margin: auto;">
-                                        {{livro.avaliacao}}</p>
+                                    <p class="ml-2 valor-avaliacao" style="font-size: 16px; color: #fff; margin: auto;">{{livro.avaliacao}}</p>
                                 </div>
                                 <p class="resenha-livro mt-2">{{ livro.descricao}}</p>
-                                <a href="{% url 'ver_livros' livro.isbn %}" class="btn w-50 custom-btn m-auto">VER
-                                    LIVRO</a>
+                                <a href="{% url 'ver_livros' livro.isbn %}" class="btn w-50 custom-btn m-auto">VER LIVRO</a>
                             </div>
                         </div>
                     </div>
@@ -137,23 +135,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Resenhas mais populares -->
-    <!-- <h4 class="mt-4" style="font-weight: bold; text-align: center;">Resenhas Mais Populares</h4>
-
-    {% for resenha in resenhas_mais_curtidas %}
-    <div class="rounded-rectangle-resenhas p-4 mt-3">
-        <div class="d-flex">
-            <img src="{{ resenha.livro.capa_url }}" alt="Capa do Livro">
-            <div class="resenha-livro px-4">
-                <h5 style="color: var(--orange-dark);">{{resenha.titulo}}</h5>
-                <p>{{resenha.texto}}</p>
-            </div>
-        </div>
-        <div class="d-flex justify-content-end">
-        </div>
-    </div>
-    {% endfor %} -->
 </div>
 
 
