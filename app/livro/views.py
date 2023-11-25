@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.db.models import Avg
 from usuarios.models import Usuario
-from datetime import date
+from datetime import date, timedelta, datetime
 from .models import Livros, Resenha, Lista_livros, CurtidaResenha, Comentarios_Resenha
 from django.shortcuts import get_object_or_404, redirect
 from decouple import config
@@ -132,10 +132,15 @@ def home(request):
         # Calcule a média das avaliações para cada livro
         livros = Livros.objects.annotate(avaliacao_media=Avg('resenha__avaliacao'))
         livros = livros.order_by('-avaliacao_media')
+        
         # Obtem os 10 melhores
         melhores_livros = livros[:10]
 
-        return render(request, 'home.html', {'categoria_livro': categorias, 'livros': livros, 'usuario_logado': usuario, 'melhores_livros': melhores_livros})
+        #Obtem as resenhas mais curtidas
+        #resenhas_mais_curtidas = Resenha.objects.all().order_by('-curtidas')[:10]
+
+        return render(request, 'home.html', {'categoria_livro': categorias, 'livros': livros, 'usuario_logado': usuario, 
+                                             'melhores_livros': melhores_livros})
     except Usuario.DoesNotExist:
         return redirect(f'/auth/login/?status=4')
 
@@ -400,3 +405,35 @@ def excluir_livro_lista(request, isbn, id):
         if livro in lista.livros.all():
             lista.livros.remove(livro)
             return redirect('minhas_listas')
+
+def atualizar_melhores_resenhas():
+    resenhas_mais_curtidas = Resenha.objects.all().order_by('-curtidas')[:10]
+    data_atual = datetime.now().date()
+
+    for resenha in resenhas_mais_curtidas:
+        if (resenha.data_final is None) or (resenha.data_final <= data_atual):
+            resenha.melhor_resenha += 1
+            resenha.data_atual = data_atual
+            resenha.data_final = data_atual + timedelta(days=2)
+            resenha.save()
+
+def minhas_resenhas(request):
+    status = request.GET.get('status')
+    usuario = request.session.get('usuario')
+
+    atualizar_melhores_resenhas()
+
+    resenhas = Resenha.objects.filter(usuario_id = usuario)
+    
+    total_resenhas = resenhas.count()
+
+    total_curtidas = 0
+    total_melhor_resenha = 0
+    for resenha in resenhas:
+        total_curtidas += resenha.curtidas 
+        total_melhor_resenha += resenha.melhor_resenha
+    
+    return render(request, 'minhas_resenhas.html', {'usuario_logado': usuario, 'resenhas': resenhas, 'total_resenhas': total_resenhas, 'total_curtidas': total_curtidas, 'total_melhor_resenha': total_melhor_resenha, 'status': status})
+
+
+

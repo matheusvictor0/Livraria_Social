@@ -3,8 +3,8 @@ from usuarios.models import Usuario
 
 class Livros(models.Model):
     isbn = models.TextField(primary_key=True, unique=True)
-    nome = models.CharField(max_length=100)
-    autor = models.CharField(max_length=30)
+    nome = models.CharField()
+    autor = models.CharField()
     capa_url = models.URLField()
     descricao = models.TextField(max_length=100)
     genero = models.CharField(max_length=100, default="Outros") 
@@ -14,7 +14,7 @@ class Livros(models.Model):
         db_table = 'livro'
 
     def __str__(self) -> str:
-            return self.nome
+        return self.nome
     
 class Resenha(models.Model):
     usuario_id = models.ForeignKey(Usuario, on_delete=models.CASCADE)
@@ -23,9 +23,14 @@ class Resenha(models.Model):
     texto = models.TextField()
     avaliacao = models.IntegerField()
     comentarios = models.ManyToManyField('Comentarios_Resenha', related_name='comentario_resenha')
-    #adição de um nova coluna e funções dentro da tabela
     curtidas = models.PositiveIntegerField(default=0)
     data = models.DateField(null=True)
+    melhor_resenha = models.IntegerField(default=0)
+    data_atual = models.DateField(null=True)
+    data_final = models.DateField(null=True)
+
+    class Meta:
+        db_table = 'Resenha'
     
     def user_has_liked(self, usuario):
         return CurtidaResenha.objects.filter(usuario=usuario, resenha=self, curtida=True).exists()
@@ -58,17 +63,26 @@ class CurtidaResenha(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     resenha = models.ForeignKey(Resenha, on_delete=models.CASCADE)
     curtida = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = 'CurtidaResenha'
  
 class Lista_livros(models.Model):
     nome_lista = models.CharField(max_length=100)
     usuario_id = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     livros = models.ManyToManyField('Livros', related_name='livros_salvos')
 
+    class Meta:
+        db_table = 'Lista_livros'
+
 class Comentarios_Resenha(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     resenha_id = models.ForeignKey(Resenha, on_delete=models.CASCADE)
     texto = models.TextField()
     data = models.DateField(null=True)
+
+    class Meta:
+        db_table = 'Comentarios_Resenha'
 
     def data_formatada(self):
         return self.data.strftime('%d de %B %Y')

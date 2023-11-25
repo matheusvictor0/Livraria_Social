@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Minhas Resenhas {% endblock %}
+
+{% block 'menu' %}
+{% include 'menu.html' %}
+{% endblock %}
+
+{% block 'content' %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'minhas_resenhas/css/minhas_resenhas.css' %}">
+{% endblock %}
+<div class="container pb-5">
+    <h4 class="text-center mt-5 ml-1">Minhas Resenhas</h4>
+
+    <div class="row mt-4 mb-4 justify-content-center">
+        <div class="card-resenha p-2 mr-lg-4">
+            <div class="d-flex justify-content-between align-items-center flex-row">
+                <div class="col left-card">
+                    <h1 class="m-0 font-weight-bold">{{ total_resenhas }}</h1>
+                </div>
+                <div class="col right-card d-flex justify-content-end">
+                    <i class='bx bxs-book-open'></i>
+                </div>
+            </div>
+            <p class="col">Resenhas</p>
+        </div>
+
+        <div class="card-curtidas p-2 mr-lg-4">
+            <div class="d-flex justify-content-between align-items-center flex-row">
+                <div class="col left-card">
+                    <h1 class="m-0 font-weight-bold">{{ total_curtidas }}</h1>
+                </div>
+                <div class="col right-card d-flex justify-content-end">
+                    <i class='bx bxs-like'></i>
+                </div>
+            </div>
+            <p class="col">Curtidas</p>
+        </div>
+
+        <div class="card-melhor-resenha p-2">
+            <div class="d-flex justify-content-between align-items-center flex-row">
+                <div class="col left-card">
+                    <h1 class="m-0 font-weight-bold">{{ total_melhor_resenha }}</h1>
+                </div>
+                <div class="col right-card d-flex justify-content-end">
+                    <i class='bx bxs-trophy'></i>
+                </div>
+            </div>
+            <p class="col">Melhor resenha</p>
+        </div>
+    </div>
+
+    {% for resenha in resenhas%}
+    <div class="rounded-rectangle-resenhas p-4 mt-3" id="resenha-{{ resenha.id }}">
+        <div class="d-flex">
+            <img src="{{ resenha.livro.capa_url }}" alt="Capa do Livro">
+            <div class="resenha-livro px-4">
+                <h5 style="color: var(--orange-dark);">{{ resenha.titulo }}</h5>
+                <p>{{ resenha.texto}}</p>
+            </div>
+        </div>
+        <div class="d-flex justify-content-end">
+            <a href="{% url 'ver_livros' resenha.livro.isbn %}#resenha-{{ resenha.id }}" class="btn btn-ver-mais">Ver mais</a>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+<script src="{% static 'minhas_resenhas/js/minhas_resenhas.js' %}"></script>
+
+{% endblock %}
