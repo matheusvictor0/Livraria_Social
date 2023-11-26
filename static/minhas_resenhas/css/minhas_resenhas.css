@@ -1,0 +1,101 @@
+button {
+    border: none;
+    box-shadow: none;
+    background: none;
+}
+
+.card-resenha,
+.card-curtidas,
+.card-melhor-resenha {
+    background-color: white;
+    border-radius: 10px;
+    width: 16rem;
+}
+
+.card-resenha {
+    border-left: 5px solid #a8c99e;
+}
+
+.card-resenha i {
+    font-size: 4rem;
+    color: #a8c99e;
+    opacity: 50%;
+}
+
+.card-curtidas {
+    border-left: 5px solid var(--orange-light);
+}
+
+.card-curtidas i {
+    font-size: 4rem;
+    color: var(--orange-light);
+    opacity: 50%;
+}
+
+.card-melhor-resenha {
+    border-left: 5px solid #ebcf8f;
+}
+
+.card-melhor-resenha i {
+    font-size: 4rem;
+    color: #ebcf8f;
+    opacity: 50%;
+}
+
+.rounded-rectangle-resenhas {
+    /* border-left: 5px solid var(--orange-light); */
+    background-color: #f3f2ed;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    padding: 1rem;
+}
+
+.rounded-rectangle-resenhas img {
+    height: 150px;
+}
+
+.rounded-rectangle-resenhas p {
+    font-size: .9em;
+}
+
+.resenha-livro {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-height: 22px;
+    max-height: 145px;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+}
+
+.btn-ver-mais,
+.btn-ver-mais:focus {
+    background-color: var(--orange-light);
+    color: white;
+    border-color: transparent;
+    box-shadow: none;
+    border-radius: 15px;
+    font-size: 14px;
+}
+
+.btn-ver-mais:hover {
+    background-color: #da574d;
+    color: white;
+}
+
+@media only screen and (max-width: 600px) {
+
+    .card-resenha,
+    .card-curtidas,
+    .card-melhor-resenha {
+        width: 80%;
+        margin-inline: 1rem;
+        margin-top: 1rem;
+    }
+    .card-resenha h1,
+    .card-curtidas h1,
+    .card-melhor-resenha h1{
+        font-size: 2em;
+    }
+
+}
