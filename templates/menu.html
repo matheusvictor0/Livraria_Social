@@ -1,0 +1,45 @@
+<div class="sidebar">
+    <div class="logo-details">
+        <div class="logo_name">LIVRARIA SOCIAL</div>
+        <i class='bx bx-menu' id="btn"></i>
+    </div>
+
+    <ul class="nav-list">
+        <li>
+            <a href="{% url 'home' %}">
+                <i class='bx bx-grid-alt'></i>
+                <span class="links_name">Página inicial</span>
+            </a>
+            <span class="tooltip">Página inicial</span>
+        </li>
+        <li>
+            <a href="{% url 'minhas_resenhas' %}">
+                <i class="bx bx-book"></i>
+                <span class="links_name">Minhas Resenhas</span>
+            </a>
+            <span class="tooltip">Minhas Resenhas</span>
+        </li>
+        <li>
+            <a href="{% url 'minhas_listas' %}">
+                <i class='bx bx-bookmark'></i>
+                <span class="links_name">Minhas listas</span>
+            </a>
+            <span class="tooltip">Minhas listas</span>
+        </li>
+        <li>
+            <a href="#">
+                <i class='bx bx-user'></i>
+                <span class="links_name">Perfil</span>
+            </a>
+            <span class="tooltip">Perfil</span>
+        </li>
+        <li>
+            <a href="{% url 'sair' %}">
+                <i class='bx bx-log-out'></i>
+                <span class="links_name">Sair</span>
+            </a>
+            <span class="tooltip">Sair</span>
+        </li>
+    </ul>
+
+</div>

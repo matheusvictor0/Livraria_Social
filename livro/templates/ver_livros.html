@@ -1,0 +1,443 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Ver Livro {% endblock %}
+
+{% block 'menu' %}
+{% include 'menu.html' %}
+{% endblock %}
+
+{% block 'content' %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'home/css/home.css' %}">
+<link rel="stylesheet" href="{% static 'ver_livros/css/ver_livros.css' %}">
+{% endblock %}
+
+<div class="status-message">
+    {% if status == '0' %}
+    <div class="alert alert-success" role="alert">
+        Livro salvo com sucesso.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %}
+    {% if status == '1' %}
+    <div class="alert alert-danger" role="alert">
+        Selecione pelo menos uma lista antes de salvar.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %}
+    {% if status == '2' %}
+    <div class="alert alert-danger" role="alert">
+        Já existe uma lista com esse nome.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endif %}
+</div>
+
+<div class="container">
+    <!-- Barra de pesquisa -->
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-auto">
+            <form class="search-container" action="{% url 'buscar' %}" method="GET">
+                <input type="text" class="search-input" name="termo_pesquisa" placeholder="Pesquisar">
+                <button type="submit" class="search-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-search" viewBox="0 0 16 16">
+                        <path
+                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                    </svg>
+                </button>
+            </form>
+        </div>
+        <!-- Seletor de categorias -->
+        <form class="col-md-3 col-6 mb-3" action="{% url 'filtrar_livros' %}" method="GET" id="filtroForm">
+            <select class="select-categoria" name="categoria" style="max-width: 100%;" onchange="this.form.submit()">
+                <option>Categorias</option>
+                {% for i in categoria_livro %}
+                <option>{{ i }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    <!-- Container de detalhes do livro-->
+    <div class="container rounded-rectangle mt-3">
+        <div class="row">
+            <div class="col-md-3 col-6 mx-auto">
+                {% if livro.capa_url %}
+                <img src="{{ livro.capa_url }}" alt="Capa do Livro" class="img-fluid imagem-livro">
+                {% else %}
+                <div class="sem-capa-detalhes d-flex align-items-center justify-content-center text-center">
+                    <h4>CAPA INDISPONÍVEL</h4>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-md-9">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex avaliacao-left align-items-center">
+                        <p>
+                            <svg style="color:#EDAC06;" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+                            </svg>
+                        <p class="ml-2 avaliacao">{{livro.avaliacao}}</p>
+                    </div>
+                    <!-- Botão para favoritar o livro -->
+                    <div class="right d-flex">
+                        <form action="{% url 'favoritar_livro' livro.isbn %}" method="POST">
+                            {% csrf_token %}
+                            <button id="favoritar-btn" class="btn btn-favorito">
+                                {% if favoritado == 1 %}
+                                <i class='bx bxs-heart'></i>
+                                {% else %}
+                                <i class='bx bx-heart'></i>
+                                {% endif %}
+                            </button>
+                        </form>
+                        <!-- Botão para salvar em uma lista -->
+                        <div class="btn-group">
+                            <button type="button" class="btn-save-list border-0" data-toggle="dropdown"
+                                aria-expanded="false">
+                                <i class='bx bx-bookmark'></i>
+                            </button>
+                            <!-- Menu suspenso de listas -->
+                            <div id="minhas-listas" class="dropdown-menu dropdown-menu-right p-0 border-0 shadow">
+                                <form action="{% url 'salvar_livro' livro.isbn %}" method="POST" id="formulario">
+                                    {% csrf_token %}
+                                    <p class="p-2 px-3 title-minhas-listas">Minhas Listas</p>
+                                    {% if listas %}
+                                    {% for lista in listas %}
+                                    {% if lista.nome_lista != 'Favoritos' %}
+                                    <div class="form-check m-2 mx-3">
+                                        <input class="form-check-input" type="checkbox" value="{{ lista.id }}"
+                                            id="check{{ lista.id }}" name="listas_selecionadas">
+                                        <label class="form-check-label" for="check{{ lista.id }}">
+                                            {{ lista.nome_lista }}
+                                        </label>
+                                    </div>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% else %}
+                                    <p>Nenhuma lista criada</p>
+                                    {% endif %}
+                                    <div class="d-flex justify-content-center mx-auto mb-2 btn-save-book mb-3">
+                                        <button class="btn-sm btn-ver-livro px-3" id="btn-salvar-lista"
+                                            type="submit">Salvar</button>
+                                    </div>
+                                </form>
+
+                                <!-- Input para adicionar uma nova lista -->
+                                <form id="criar-lista-form" method="POST"
+                                    action="{% url 'criar_lista' isbn=livro.isbn %}">
+                                    {% csrf_token %}
+                                    <div class="input-group text-sm">
+                                        <input type="text" class="form-control border-0 input-add-list ml-3"
+                                            placeholder="Crie uma nova lista" aria-label="Recipient's username"
+                                            aria-describedby="button-addon2" name="nova_lista">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline border-0 mr-3 btn-add-list mb-1"
+                                                type="submit" id="button-addon2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                                    fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16"
+                                                    style="color: var(--orange-dark);">
+                                                    <path fill-rule="evenodd"
+                                                        d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="message-validation text-center mb-2"></div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- Detalhes do livro -->
+                <h5 class="card-title">{{livro.nome}}</h5>
+                <p class="card-text text-autor">{{livro.autor}}</p>
+                <div class="container-descricao">
+                    <div class="card-body">
+                        <div class="descricao-livro">
+                            {{livro.descricao}}
+                            <span class="ler-mais" onclick="expandirDescricao(this)">Ler mais</span>
+                            <span class="ocultar" onclick="ocultarDescricao(this)">Ocultar</span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="d-flex mt-3 justify-content-end">
+                    <button id="toggleFormularioResenha" class="btn btn-ver-livro">Adicionar Resenha</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario adicionar resenha para o livro -->
+    <div id="formularioResenha" style="display: none;" class="rounded-rectangle mt-3 mb-5">
+        <form method="POST" action="{% url 'adicionar_resenha' isbn=livro.isbn %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" class="form-control" id="titulo_resenha" name="titulo_resenha"
+                    placeholder="Título da resenha">
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" id="texto_resenha" name="texto_resenha"
+                    placeholder="Escreva sua resenha "></textarea>
+            </div>
+            <p class="mb-0 avaliacao">Avalie o livro</p>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="rating">
+                    <span class="star" data-rating="1"><i class='bx bxs-star'></i></span>
+                    <span class="star" data-rating="2"><i class='bx bxs-star'></i></span>
+                    <span class="star" data-rating="3"><i class='bx bxs-star'></i></span>
+                    <span class="star" data-rating="4"><i class='bx bxs-star'></i></span>
+                    <span class="star" data-rating="5"><i class='bx bxs-star'></i></span>
+                </div>
+                <input type="hidden" name="avaliacao_resenha" id="avaliacao_resenha" value="0">
+
+                <button type="submit" class="btn btn-ver-livro ml-2">Enviar Resenha</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- card para cada resenha -->
+    {% for resenha, curtida in resenhas_combinada %}
+    <div class="rounded-rectangle-resenhas my-3">
+        <div class="container-resenhas" id="resenha-{{ resenha.id }}">
+            <div class="d-flex justify-content-between align-items-start">
+                <div class="perfil-user d-flex align-items-start">
+                    <div class="img-user">
+                        <i class='bx bx-user'></i>
+                    </div>
+                    <div class="ml-3">
+                        <div class="nome-user mb-1">{{ resenha.usuario_id.nome }}</div>
+                        <h6 class="titulo-resenha">{{ resenha.titulo }}</h6>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="rating-resenha">
+                                <div class="star-resenha" data-rating="{{ resenha.avaliacao }}">
+                                    <i class='bx bxs-star'></i>
+                                    <i class='bx bxs-star'></i>
+                                    <i class='bx bxs-star'></i>
+                                    <i class='bx bxs-star'></i>
+                                    <i class='bx bxs-star'></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% if resenha.usuario_id == usuario_logado %}
+                <div class="btn-group">
+                    <button type="button" class="dropdown-resenha border-0" data-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class='bx bx-dots-horizontal-rounded' style="font-size: 22px; color: gray;"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right p-2 border-0 w-auto">
+                        <button class="btn-editar dropdown-item" type="submit"
+                            data-resenha-id="{{ resenha.id }}">Editar</button>
+                        <button class="btn-excluir-resenha dropdown-item mr-2" type="submit"
+                            data-lista-id="{{resenha.id}}" data-toggle="modal-resenha"
+                            data-target="#modal-excluir-resenha" style="color: #EA2617;">Excluir</button>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <hr>
+            <div class="resenha-user mt-3">
+                <p>{{ resenha.texto }}</p>
+            </div>
+            <div class="btn-resenha d-flex justify-content-between">
+                <div class="btn-left d-flex">
+                    <form method="POST" action="{% url 'curtir_resenha' resenha.id livro.isbn %}">
+                        {% csrf_token %}
+                        <button type="submit" class="border-0 mr-1" id="like-button">
+                            {% if curtida %}
+                            <i class='bx bxs-like'></i>
+                            {% else %}
+                            <i class='bx bx-like'></i>
+                            {% endif %}
+                        </button>
+                    </form>
+                    <p class="contagem">{{ resenha.contagem_curtidas }}</p>
+
+                    <button class="btn-comentarios d-flex align-items-start border-0 ml-4" type="submit"><i
+                            id="icon-comment" class='bx bx-comment'></i></button>
+                    <p class="contagem ml-1">{{ resenha.contagem_comentarios }}</p>
+                </div>
+
+                <p class="data-resenha">{{ resenha.data_formatada }}</p>
+
+            </div>
+        </div>
+        <div class="container-comentarios py-3" id="container-comentario-{{ resenha.id }}" style="display: none;">
+            <form method="POST" action="{% url 'comentar_resenha' resenha.id %}"
+                class="form-comentarios d-flex justify-content-end align-items-center ml-4">
+                {% csrf_token %}
+                <textarea class="text-comentario w-100" id="texto_comentario" name="texto_comentario"
+                    placeholder="Escreva um comentário"></textarea>
+                <button type="submit" class="btn btn-ver-livro ml-2">Comentar
+                </button>
+            </form>
+
+            {% for comentario in resenha.comentarios.all %}
+            <hr>
+            <div class="d-flex justify-content-between align-items-start mt-4" id="comentario-{{ comentario.id }}">
+
+                <div class="perfil-user d-flex align-items-start">
+                    <div class="d-flex align-items-center">
+                        <div class="barra-horizontal">
+                        </div>
+                        <div class="img-user">
+                            <i class='bx bx-user'></i>
+                        </div>
+                    </div>
+                    <div class="ml-3">
+                        <div class="nome-user mb-1">{{ comentario.usuario.nome }}</div>
+                        <p class="text-comentario">{{comentario.texto}}</p>
+                    </div>
+                </div>
+
+                {% if comentario.usuario == usuario_logado %}
+                <div class="btn-group">
+                    <button type="button" class="dropdown-resenha border-0" data-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class='bx bx-dots-horizontal-rounded' style="font-size: 22px; color: gray;"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right p-2 border-0 w-auto">
+                        <button class="btn-editar-comentario dropdown-item"
+                            data-comentario-id="{{ comentario.id }}">Editar</button>
+                        <button class="btn-excluir-comentario dropdown-item mr-2" type="submit"
+                            data-lista-id="{{comentario.id}}" data-toggle="modal-comentario"
+                            data-target="#modal-excluir-comentario" style="color: #EA2617;">Excluir</button>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="d-flex justify-content-end">
+                <p class="data-comentario">{{ comentario.data_formatada }}</p>
+            </div>
+
+            <div style="display: none;" class="form-edit" id="form-edit-{{ comentario.id }}">
+                <form method="POST" action="{% url 'editar_comentario' comentario.id %}"
+                    class="form-comentarios d-flex justify-content-end align-items-center ml-4">
+                    {% csrf_token %}
+                    <textarea class="text-comentario w-100" id="texto_edit_comentario_{{ comentario.id }}"
+                        name="texto_edit_comentario" placeholder="Novo comentário"></textarea>
+                    <button type="submit" class="btn btn-ver-livro ml-2">Editar</button>
+                </form>
+            </div>
+
+            <!-- Modal de confirmação para excluir Comentario -->
+            <div class="modal-excluir-comentario">
+                <div id="fade-comentario" class="hide"></div>
+                <div id="modal-comentario" class="hide">
+                    <div class="modal-header">
+                        <div class="left-header">
+                            <i class='bx bx-error alert-danger'></i>
+                            <h5 class="text-start">Excluir Comentário</h5>
+                        </div>
+                        <div class="right-header">
+                            <button id="close-modal-comentario"><i class='bx bx-x'></i></button>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <p>Tem certeza de que deseja excluir o comentário selecionado?</p>
+                    </div>
+                    <div class="btn-modal d-flex justify-content-end mb-3">
+                        <button class="btn" id="cancelar-modal-comentario">Cancelar</button>
+                        <form action="{% url 'excluir_comentario' comentario.id %}" method="POST">
+                            {% csrf_token %}
+                            <button class="btn" type="submit" id="confirmar-modal-comentario">Excluir</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Editar resenha -->
+        {% if resenha.usuario_id == usuario_logado %}
+        <div id="editarResenha_{{ resenha.id }}" style="display: none;" class="rounded-rectangle mt-3 mb-5">
+            <form method="POST" action="{% url 'editar_resenha' resenha.id %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" class="form-control" id="titulo_resenha" name="titulo_resenha"
+                        placeholder="Novo título da resenha">
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" id="texto_resenha" name="texto_resenha"
+                        placeholder="Escreva sua nova resenha"></textarea>
+                </div>
+                <p class="mb-0 avaliacao">Avalie o livro</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="rating">
+                        <span class="star" data-rating="1"><i class='bx bxs-star'></i></span>
+                        <span class="star" data-rating="2"><i class='bx bxs-star'></i></span>
+                        <span class="star" data-rating="3"><i class='bx bxs-star'></i></span>
+                        <span class="star" data-rating="4"><i class='bx bxs-star'></i></span>
+                        <span class="star" data-rating="5"><i class='bx bxs-star'></i></span>
+                    </div>
+                    <input type="hidden" name="avaliacao_resenha" id="edit_avaliacao_resenha" value="0">
+
+                    <button type="submit" class="btn btn-ver-livro ml-2">Editar Resenha</button>
+                </div>
+            </form>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <!-- Modal de confirmação para excluir Resenha -->
+    <div class="modal-excluir-resenha">
+        <div id="fade-resenha" class="hide"></div>
+        <div id="modal-resenha" class="hide">
+            <div class="modal-header">
+                <div class="left-header">
+                    <i class='bx bx-error alert-danger'></i>
+                    <h5 class="text-start">Excluir Resenha</h5>
+                </div>
+                <div class="right-header">
+                    <button id="close-modal-resenha"><i class='bx bx-x'></i></button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza de que deseja excluir a resenha selecionada?</p>
+            </div>
+            <div class="btn-modal d-flex justify-content-end mb-3">
+                <button class="btn" id="cancelar-modal-resenha">Cancelar</button>
+                <form action="{% url 'excluir_resenha' resenha.id %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn" type="submit" id="confirmar-modal-resenha">Excluir</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var fragment = window.location.hash;
+        if (fragment) {
+            var targetElement = document.querySelector(fragment);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    });
+</script>
+
+
+<script src="{% static 'ver_livros/js/ver_livros.js' %}"></script>
+{% endblock %}

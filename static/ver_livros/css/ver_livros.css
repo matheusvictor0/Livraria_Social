@@ -1,0 +1,418 @@
+.status-message {
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 10px;
+    max-width: 600px;
+}
+
+.btn-favorito i,
+.btn-save-list i{
+    color: var(--orange-dark);
+    font-size: 28px;
+}
+
+.right form .btn-favorito:focus,
+.right .btn-save-list:focus{
+    border-color: transparent;
+    box-shadow: none;
+    transition: 0.8s;
+}
+
+.right form .btn-favorito:hover,
+.right .btn-save-list:hover{
+    transform: scale(1.05);
+}
+
+/* Container detalhes do livro */
+.rounded-rectangle {
+    padding: 30px;
+    background-color: #f3f2ed;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+.rounded-rectangle-resenhas{
+    border-left: 5px solid var(--orange-light);
+    background-color: #f3f2ed;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.rounded-rectangle .imagem-livro {
+    height: auto;
+    width: 100%;
+}
+
+.rounded-rectangle .sem-capa-detalhes {
+    height: 350px;
+    width: 230px;
+    background-color: #cfcfcf;
+}
+
+.container-descricao {
+    margin-top: 30px;
+}
+
+.container-descricao .card-body {
+    border: 1px solid var(--beige-medium);
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.descricao-livro {
+    max-height: 150px;
+    width: auto;
+    overflow: hidden;
+    position: relative;
+    text-align: justify;
+}
+
+.ler-mais {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-radius: 30px;
+    background-color: var(--beige-medium);
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.ocultar {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border-radius: 30px;
+    background-color: var(--beige-medium);
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.descricao-livro:hover .ler-mais {
+    display: block;
+}
+
+.descricao-livro:hover .ocultar {
+    display: none;
+}
+
+.card-title {
+    font-size: 28px;
+    text-transform: capitalize;
+    color: var(--orange-dark);
+}
+
+.avaliacao {
+    font-size: 14px;
+}
+
+.btn-ver-livro,
+.btn-ver-livro:focus {
+    background-color: var(--orange-light);
+    color: white;
+    border-color: transparent;
+    box-shadow: none;
+    border-radius: 15px;
+    font-size: 14px;
+}
+
+.btn-ver-livro:hover {
+    background-color: #da574d;
+    color: white;
+}
+
+/* Container adicionar resenha */
+.form-control {
+    border-radius: 5px;
+}
+
+.form-control:focus {
+    border-color: var(--orange-light);
+    box-shadow: none;
+}
+
+::placeholder {
+    font-size: 14px;
+}
+
+#formularioResenha input,
+#formularioResenha textarea{
+    font-size: 14px;
+}
+
+.star i{
+    color: var(--gray-light);
+    cursor: pointer;
+    font-size: 20px;
+
+}
+.star i:hover {
+    transform: scale(1.2);
+}
+
+.rating .star.filled i::before {
+    color: #EDAC06;
+}
+
+/* Dropdown salvar livro em listas */
+.input-add-list{
+    border-radius: 15px;
+    height: 36px;
+    background-color: #dbdbdb;
+}
+.input-add-list:focus{
+    outline: none;
+    background-color: #dbdbdb;
+}
+
+.btn-add-list{
+    background-color: #dbdbdb;
+    height: 36px;
+    border-radius: 15px;
+}
+.btn-add-list:focus{
+    outline: none;
+    box-shadow: none;
+}
+.dropdown-menu{
+    width: 250px;
+    font-size: 14px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+.dropdown-menu .title-minhas-listas{
+    background-color: var(--orange-light);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    font-size: 16px;
+}
+.form-check-input{
+    height: 15px;
+    width: 15px;
+}
+.message-validation{
+    color: #EA2617;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* CONTAINER RESENHAS */
+.container-resenhas {
+    /* border-left: 5px solid var(--orange-light); */
+    padding: 30px 30px 0 30px;
+}
+.container-comentarios{
+    padding-right: 30px;
+}
+.container-comentarios .form-comentarios{
+    border: 1px solid var(--orange-light); 
+    border-radius: 10px; 
+    padding: 10px;
+}
+.container-comentarios .barra-horizontal{
+    width: 30px; 
+    border-bottom: 2px solid var(--orange-light);
+}
+.container-comentarios .text-comentario{
+    font-size: 14px;
+}
+
+.rounded-rectangle-resenhas .img-user {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rounded-rectangle-resenhas .nome-user {
+    font-size: 14px;
+    color: rgb(87, 87, 87);
+}
+
+.rounded-rectangle-resenhas .titulo-resenha {
+    color: var(--orange-dark);
+}
+
+.rounded-rectangle-resenhas .resenha-user {
+    font-size: 14px;
+}
+
+.rounded-rectangle-resenhas .btn-resenha i {
+    font-size: 22px;
+    color: var(--orange-dark);
+}
+
+.rounded-rectangle-resenhas .btn-resenha .contagem{
+    font-size: 16px;
+    color: var(--orange-dark);
+}
+
+.rounded-rectangle-resenhas .data-resenha,
+.data-comentario{
+    font-size: 12px;
+    color: #888;
+}
+
+.star-resenha {
+    color: #EDAC06;
+    font-size: 14px;
+}
+
+textarea {
+    background: none;
+    border: none;
+    resize: none;
+    overflow: hidden;
+}
+
+textarea:focus {
+    outline: none;
+}
+
+.dropdown-menu button:focus{
+    background: none;
+    color: #000;
+}
+
+.dropdown-menu btn-excluir:hover{
+    background-color: #EA2617;
+    color: #fff;
+}
+
+
+/* MODAL EXCLUIR*/
+button {
+    border: none;
+    box-shadow: none;
+    background: none;
+}
+
+.btn:focus {
+    border-color: none;
+    box-shadow: none;
+}
+
+#cancelar-modal-resenha,
+#cancelar-modal-comentario{
+    border: 1px solid #000;
+    border-radius: 10px;
+}
+
+#confirmar-modal-resenha,
+#confirmar-modal-comentario{
+    border-radius: 10px;
+    background-color: #EA2617;
+    color: #fff;
+    margin-left: .8rem;
+}
+
+#confirmar-modal-resenha:hover,
+#confirmar-modal-comentario:hover {
+    background-color: #c92216;
+}
+
+#close-modal-resenha,
+#close-modal-comentario{
+    cursor: pointer;
+    opacity: 0.9;
+    font-size: 1.5rem;
+    color: #888;
+}
+
+button:hover {
+    opacity: 1;
+}
+
+#fade-resenha,
+#fade-comentario{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 5;
+}
+
+#modal-resenha,
+#modal-comentario{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    max-width: 90%;
+    background-color: #fff;
+    padding: 1.2rem;
+    border-radius: 0.5rem;
+    z-index: 10;
+}
+
+#fade-resenha,
+#fade-comentario,
+#modal-resenha,
+#modal-comentario{
+    transition: 0.5s;
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal-header {
+    color: #000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: .5rem;
+    padding-bottom: .5rem;
+}
+
+.modal-body p {
+    margin-bottom: .5rem;
+    font-size: 15px;
+
+}
+
+#modal-resenha.hide,
+#modal-comentario.hide,
+#fade-resenha.hide,
+#fade-comentario.hide {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#modal-resenha.hide,
+#modal-comentario.hide{
+    top: 0;
+}
+
+.left-header {
+    display: flex;
+    align-items: center;
+}
+
+.left-header h5 {
+    margin-left: 1rem;
+}
+
+.left-header i {
+    font-size: 24px;
+    border-radius: 50%;
+    color: #EA2617;
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+.btn-modal {
+    padding-inline: 1.2rem;
+}
+
+@media only screen and (max-width: 600px) {
+    .rounded-rectangle .card-title{
+        font-size: 1.2em;
+    }
+}

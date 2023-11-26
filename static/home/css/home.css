@@ -1,0 +1,456 @@
+.search-container {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    border: 1.5px solid var(--orange-dark);
+    border-radius: 30px;
+    padding: 2px 6px;
+    margin-top: 20px;
+    background-color: var(--beige-light);
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    padding: 5px;
+    outline: none;
+    background: none;
+    border-radius: 30px 0 0 30px;
+}
+
+.search-button {
+    background: none;
+    border: none;
+    color: var(--orange-dark);
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.select-categoria {
+    padding: 10px;
+    border: 1.5px solid var(--orange-dark);
+    border-radius: 30px;
+    padding: 6px 6px;
+    margin-top: 20px;
+    background-color: var(--beige-light);
+    font-size: 14px;
+}
+
+.select-categoria:focus {
+    outline: none;
+}
+
+.container-fluid .busca-livros {
+    background-color: #f3f2ed;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.busca-livros .livro-container {
+    margin: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s;
+    background-size: cover;
+    background-position: center;
+}
+
+.busca-livros .livro-container:hover {
+    transform: scale(1.05);
+}
+
+/* Estilo da sombra overlay */
+.livro-container a .livro-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Estilo de hover para a sombra overlay */
+.livro-container:hover .livro-overlay {
+    opacity: 1;
+}
+
+/* Estilo do ícone de busca na overlay */
+.busca-livros a .livro-overlay svg {
+    fill: white;
+    font-size: 24px;
+}
+
+.container-fluid .busca-livros .sem-capa a {
+    text-decoration: none;
+    color: black;
+    width: 100%;
+    height: 100%;
+    font-weight: bold;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.busca-livros .sem-capa {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 130px;
+    height: 195px;
+    text-align: center;
+    background-color: #cfcfcf;
+    padding: 5px;
+    font-size: 14px;
+}
+
+/* CAROUSEL */
+.wrapper {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.slide-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%;
+}
+
+.slide-list {
+    display: flex;
+    height: 280px;
+}
+
+.slide-item {
+    cursor: grab;
+    flex-shrink: 0;
+    padding: 0 10px;
+    width: 50vw;
+}
+
+.slide-content {
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    position: relative;
+    height: 100%;
+    display: flex;
+}
+
+.slide-content.slide-1,
+.slide-content.slide-4,
+.slide-content.slide-7 {
+    background: linear-gradient(to bottom right, #e47f83, #c76e71);
+}
+
+.slide-content.slide-2,
+.slide-content.slide-5,
+.slide-content.slide-8,
+.slide-content.slide-10{
+    background: linear-gradient(to bottom right, #ebcf8f, #c0aa76);
+}
+
+.slide-content.slide-3,
+.slide-content.slide-6,
+.slide-content.slide-9 {
+    background: linear-gradient(to bottom right, #a8c99e, #8faa87);
+}
+
+.slide-image {
+    width: 190px;
+    height: auto;
+    max-height: 285px;
+    margin-left: 20px;
+    margin-right: 20px;
+    position: absolute;
+    top: 30px;
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
+}
+.sem-capa-carousel{
+    width: 190px;
+    height: 285px;
+    display: flex;
+    align-items: center;
+    background-color: #cfcfcf;
+    margin-left: 20px;
+    position: absolute;
+    top: 30px;
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;
+}
+.sem-capa-carousel p{
+    padding: 5px;
+    font-size: 20px;
+    text-align: center;
+    margin: auto;
+    font-weight: 500;
+}
+
+.img-left {
+    flex: 30%;
+}
+
+.description-right {
+    flex: 70%;
+}
+
+.slide-description {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    flex-direction: column;
+    border-radius: 10px;
+    color: #fff;
+    padding: 30px 30px 35px 30px;
+    bottom: 0;
+    width: 100%;
+    line-height: 12px;
+
+}
+
+.slide-description .autor-livro {
+    color: #fff;
+    font-size: 14px;
+}
+
+.slide-description .titulo-livro {
+    font-size: 22px;
+    font-weight: bold;
+    text-transform: capitalize;
+    color: #fff;
+    line-height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    max-height: 80px;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+}
+
+.slide-description .resenha-livro {
+    color: #fff;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-height: 16px;
+    max-height: 52px;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.custom-btn,
+.custom-btn:focus {
+    background-color: #fff;
+    /* color: gray; */
+    font-weight: bold;
+    border-color: none;
+    /* box-shadow: none; */
+    border-radius: 15px;
+    font-size: 14px;
+    mix-blend-mode: screen;
+    transition: .5s;
+}
+
+.custom-btn:hover {
+    mix-blend-mode: screen;
+    transform: scale(1.1);
+}
+
+.slide-nav-button {
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    font-size: 36px;
+    position: absolute;
+    z-index: 1;
+}
+
+.slide-nav-previous {
+    left: 20px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.582);
+    padding: 5px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+}
+
+.slide-nav-next {
+    right: 20px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.582);
+    padding: 5px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+}
+
+.slide-controls {
+    margin: 40px auto 0;
+}
+
+.slide-control-button {
+    color: #fff;
+    cursor: pointer;
+    background: transparent;
+    font-size: 8px;
+    margin: 0 5px;
+    border: none;
+}
+
+.slide-control-button.active {
+    color: #9c9c9c;
+}
+/* @media screen and (max-width: 768px) */
+@media only screen and (max-width: 600px){
+    .slide-list {
+        height: 100%;
+    }
+    .slide-item {
+        width: 60vw;
+        padding-top: 100px;
+        height: 100%;
+    }
+    
+    .slide-content{
+        display: block;
+        height: 100%;
+    }
+    .slide-description{
+        padding-top: 100px;
+    }
+    .slide-description .titulo-livro{
+        margin-top: 120px;
+    }
+    .slide-image {
+        width: 150px;
+        top: -100px;
+        left: 20px;
+    }
+
+    .img-left {
+        flex: 45%;
+    }
+
+    .description-right {
+        flex: 55%;
+    }
+
+    .slide-description {
+        padding: 30px 10px 35px 10px;
+    }
+
+    .slide-description .titulo-livro {
+        font-size: 20px;
+    }
+
+    .slide-description .resenha-livro {
+        max-height: 60px;
+        -webkit-line-clamp: 4;
+    }
+
+    .slide-nav-button {
+        margin-top: -20px;
+        font-size: 28px;
+    }
+
+    .slide-nav-previous {
+        left: 10px;
+    }
+
+    .slide-nav-next {
+        right: 10px;
+    }
+
+    /* Resenhas mais populares */
+    .container-fluid .rounded-rectangle-resenhas {
+        /* border-left: 5px solid var(--orange-light); */
+        background-color: #f3f2ed;
+        border-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+        padding: 1rem;
+    }
+    
+    .rounded-rectangle-resenhas img {
+        height: 150px;
+    }
+    
+    .rounded-rectangle-resenhas p {
+        font-size: .9em;
+    }
+    
+    .resenha-livro {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        line-height: 22px;
+        max-height: 145px;
+        -webkit-line-clamp: 6;
+        -webkit-box-orient: vertical;
+    }
+    
+    .btn-ver-mais,
+    .btn-ver-mais:focus {
+        background-color: var(--orange-light);
+        color: white;
+        border-color: transparent;
+        box-shadow: none;
+        border-radius: 15px;
+        font-size: 14px;
+    }
+    
+    .btn-ver-mais:hover {
+        background-color: #da574d;
+        color: white;
+    }
+}
+/* .slide-item {
+    width: 70vw;
+}
+
+.slide-image {
+    width: 180px;
+}
+
+.img-left {
+    flex: 45%;
+}
+
+.description-right {
+    flex: 55%;
+}
+
+.slide-description {
+    padding: 30px 10px 35px 10px;
+}
+
+.slide-description .titulo-livro {
+    font-size: 20px;
+}
+
+.slide-description .resenha-livro {
+    max-height: 60px;
+    -webkit-line-clamp: 4;
+}
+
+.slide-nav-button {
+    margin-top: -20px;
+    font-size: 28px;
+}
+
+.slide-nav-previous {
+    left: 10px;
+}
+
+.slide-nav-next {
+    right: 10px;
+} */
