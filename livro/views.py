@@ -436,5 +436,3 @@ def minhas_resenhas(request):
     
     return render(request, 'minhas_resenhas.html', {'usuario_logado': usuario, 'resenhas': resenhas, 'total_resenhas': total_resenhas, 'total_curtidas': total_curtidas, 'total_melhor_resenha': total_melhor_resenha, 'status': status})
 
-
-

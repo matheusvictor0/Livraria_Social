@@ -67,7 +67,6 @@
                 {% endif %}
                 {% else %}
                 <div class="sem-capa">
-
                     <a href="{% url 'adicionar_livro' livro.isbn %}">
                         <p>{{ livro.titulo }}</p>
                         <div class="livro-overlay">
@@ -78,7 +77,8 @@
                             </svg>
                         </div>
                     </a>
-                    
+
+               
                 </div>
                 {% endif %}
             </div>

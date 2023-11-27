@@ -373,7 +373,6 @@
     color: var(--orange-dark);
 }
 
-/* @media screen and (max-width: 768px) */
 @media only screen and (max-width: 600px){
     .container-fluid{
         overflow-x: hidden;
@@ -436,7 +435,6 @@
     .slide-nav-next {
         right: 10px;
     }
-
     .resenhas-populares{
         margin-top: 15px;
     }

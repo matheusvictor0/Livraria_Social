@@ -71,7 +71,7 @@ class Lista_livros(models.Model):
     nome_lista = models.CharField(max_length=100)
     usuario_id = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     livros = models.ManyToManyField('Livros', related_name='livros_salvos')
-
+    
     class Meta:
         db_table = 'Lista_livros'
 
