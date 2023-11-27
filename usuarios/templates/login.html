@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_usuarios.html' %}
 {% load static %}
 
 {% block title %} Login {% endblock %}
@@ -75,10 +75,10 @@
             <form method="POST" action="{% url 'valida_login' %}">{% csrf_token %}
 
                 <div class="input-group mb-3">
-                    <input name="email" type="email" class="form-control form-control-lg fs-6" placeholder="Email">
+                    <input name="email" type="email" class="form-control form-control-md fs-6" placeholder="Email">
                 </div>
                 <div class="input-group mb-3">
-                    <input name="senha" type="password" class="form-control form-control-lg fs-6" placeholder="Senha">
+                    <input name="senha" type="password" class="form-control form-control-md fs-6" placeholder="Senha">
                 </div>
 
                 <div class="row justify-content-center">
@@ -87,7 +87,7 @@
                 </div>
 
                 <div class="input-group mb-3">
-                    <input class="btn btn-lg custom-btn w-100 fs-6" type="submit" value="Entrar">
+                    <input class="btn btn-md custom-btn w-100 fs-6" type="submit" value="Entrar">
                 </div>
 
                 <div class="row justify-content-center">

@@ -57,7 +57,7 @@
             </form>
         </div>
         <!-- Seletor de categorias -->
-        <form class="col-md-3 col-3 mb-3" action="{% url 'filtrar_livros' %}" method="GET" id="filtroForm">
+        <form class="col-md-3 col-6 mb-3" action="{% url 'filtrar_livros' %}" method="GET" id="filtroForm">
             <select class="select-categoria" name="categoria" style="max-width: 100%;" onchange="this.form.submit()">
                 <option>Categorias</option>
                 {% for i in categoria_livro %}
@@ -216,10 +216,12 @@
         <div class="container-resenhas" id="resenha-{{ resenha.id }}">
             <div class="d-flex justify-content-between align-items-start">
                 <div class="perfil-user d-flex align-items-start">
-                    <div class="img-user">
-                        <i class='bx bx-user'></i>
+                    <div class="px-1">
+                        <div class="img-user">
+                            <i class='bx bx-user' style="font-size: 24px;"></i>
+                        </div>
                     </div>
-                    <div class="ml-3">
+                    <div class="ml-2">
                         <div class="nome-user mb-1">{{ resenha.usuario_id.nome }}</div>
                         <h6 class="titulo-resenha">{{ resenha.titulo }}</h6>
                         <div class="d-flex justify-content-between align-items-center">
@@ -426,6 +428,17 @@
     {% endfor %}
 
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var fragment = window.location.hash;
+        if (fragment) {
+            var targetElement = document.querySelector(fragment);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    });
+</script>
 
 <script src="{% static 'ver_livros/js/ver_livros.js' %}"></script>
 {% endblock %}
