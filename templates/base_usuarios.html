@@ -9,7 +9,7 @@
   
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="{% static 'general/css/base.css' %}">
+  <!-- <link rel="stylesheet" href="{% static 'general/css/base.css' %}"> -->
   <link rel="stylesheet" href="{% static 'general/css/general.css' %}">
   <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
   {% block 'head' %}{% endblock %}
@@ -17,17 +17,11 @@
   <title>{% block 'title' %}{% endblock %}</title>
 </head>
 
-<body>
-  {% block 'menu' %}
+<body style="background: var(--beige-light);">
+
+  {% block 'content' %}
   {% endblock %}
   
-  <div class="home-section">
-    {% block 'content' %}
-    {% endblock %}
-  </div>
-    
-  <script src="{% static 'general/js/base.js' %}"></script>
-
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

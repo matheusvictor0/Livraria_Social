@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_usuarios.html' %}
 {% load static %}
 
 {% block title %} Cadastro {% endblock %}
@@ -87,26 +87,26 @@
 
             <form method="POST" action="{% url 'valida_cadastro' %}">{% csrf_token %}
                 <div class="input-group mb-3">
-                    <input name="nome" type="text" class="form-control form-control-lg bg-light fs-6"
+                    <input name="nome" type="text" class="form-control form-control-md bg-light fs-6"
                         placeholder="Nome">
                 </div>
                 <div class="input-group mb-3">
-                    <input name="email" type="email" class="form-control form-control-lg bg-light fs-6"
+                    <input name="email" type="email" class="form-control form-control-md bg-light fs-6"
                         placeholder="Email">
                 </div>
                 <div class="input-group mb-3">
-                    <input name="senha" type="password" class="form-control form-control-lg bg-light fs-6"
+                    <input name="senha" type="password" class="form-control form-control-md bg-light fs-6"
                         placeholder="Senha">
                 </div>
                 <div class="input-group mb-3">
-                    <input name="senha_repeticao" type="password" class="form-control form-control-lg bg-light fs-6"
+                    <input name="senha_repeticao" type="password" class="form-control form-control-md bg-light fs-6"
                         placeholder="Repita a senha">
                 </div>
                 <div class="input-group mb-3">
-                    <input class="btn btn-lg custom-btn w-100 fs-6" type="submit" value="Cadastrar">
+                    <input class="btn btn-md custom-btn w-100 fs-6" type="submit" value="Cadastrar">
                 </div>
                 <div class="input-group mb-3">
-                    <a href="{% url 'login' %}" class="btn custom-btn-light btn-lg w-100 fs-6">Login</a>
+                    <a href="{% url 'login' %}" class="btn custom-btn-light btn-md w-100 fs-6">Login</a>
                 </div>
 
             </form>

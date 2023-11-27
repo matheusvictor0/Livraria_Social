@@ -237,6 +237,7 @@ body{
   transition: all 0.5s ease;
   z-index: 2;
 }
+
 .sidebar.open ~ .home-section{
   left: 250px;
   width: calc(100% - 250px);

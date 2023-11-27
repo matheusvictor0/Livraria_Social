@@ -137,19 +137,20 @@ def home(request):
         melhores_livros = livros[:10]
 
         #Obtem as resenhas mais curtidas
-        #resenhas_mais_curtidas = Resenha.objects.all().order_by('-curtidas')[:10]
+        resenhas_mais_curtidas = Resenha.objects.all().order_by('-curtidas')[:10]
 
         return render(request, 'home.html', {'categoria_livro': categorias, 'livros': livros, 'usuario_logado': usuario, 
-                                             'melhores_livros': melhores_livros})
+                                             'melhores_livros': melhores_livros, 'resenhas_mais_curtidas': resenhas_mais_curtidas})
     except Usuario.DoesNotExist:
         return redirect(f'/auth/login/?status=4')
 
 
 def favoritar_livro(request,isbn):
     if request.method == 'POST':
+        usuario = Usuario.objects.get(id = request.session['usuario']) 
         nome = "Favoritos"
         livro = Livros.objects.get(isbn=isbn)
-        lista = Lista_livros.objects.get(nome_lista=nome)
+        lista = Lista_livros.objects.get(nome_lista=nome, usuario_id=usuario)
         if lista.livros.filter(pk=livro.pk).exists():
             lista.livros.remove(livro)
         else:
@@ -192,10 +193,10 @@ def ver_livros(request, isbn):
     resenhas_combinada = zip(resenhas, curtidas)
 
     nome_lista = "Favoritos"
-    listas_banco = Lista_livros.objects.filter(nome_lista=nome_lista)
+    listas_banco = Lista_livros.objects.filter(nome_lista=nome_lista, usuario_id=usuario)
 
     if listas_banco:
-        lista = Lista_livros.objects.get(nome_lista=nome_lista)
+        lista = Lista_livros.objects.get(nome_lista=nome_lista, usuario_id=usuario)
         if lista.livros.filter(pk=livro.pk).exists():
             favoritado = 1
         else:

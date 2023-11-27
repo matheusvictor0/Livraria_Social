@@ -77,6 +77,7 @@
   color: var(--orange-dark); 
   font-weight: 700; 
   font-size: 24px;
+  margin: 0;
 }
 .container .row .left-container .featured-image{
   width: auto;
