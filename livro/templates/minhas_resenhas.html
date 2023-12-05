@@ -56,14 +56,21 @@
     {% for resenha in resenhas%}
     <div class="rounded-rectangle-resenhas p-4 mt-3" id="resenha-{{ resenha.id }}">
         <div class="d-flex">
+            {% if resenha.livro.capa_url %}
             <img src="{{ resenha.livro.capa_url }}" alt="Capa do Livro">
+            {% else %}
+            <div class="sem-capa p-1">
+                <p>CAPA INDISPONÍVEL</p>
+            </div>
+            {% endif%}
             <div class="resenha-livro px-4">
                 <h5 style="color: var(--orange-dark);">{{ resenha.titulo }}</h5>
                 <p>{{ resenha.texto}}</p>
             </div>
         </div>
         <div class="d-flex justify-content-end">
-            <a href="{% url 'ver_livros' resenha.livro.isbn %}#resenha-{{ resenha.id }}" class="btn btn-ver-mais">Ver mais</a>
+            <a href="{% url 'ver_livros' resenha.livro.isbn %}#resenha-{{ resenha.id }}" class="btn btn-ver-mais">Ver
+                mais</a>
         </div>
     </div>
     {% endfor %}

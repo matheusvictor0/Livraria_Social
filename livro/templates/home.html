@@ -78,7 +78,7 @@
                         </div>
                     </a>
 
-               
+
                 </div>
                 {% endif %}
             </div>
@@ -141,10 +141,10 @@
     <!-- Resenhas mais populares -->
     <h4 class="mt-5" style="font-weight: bold; text-align: center;">Resenhas Mais Populares</h4>
     <hr>
-    <div class="container-resenhas-populares row mb-5 mt-4 mx-3">
+    <div class="container-resenhas-populares row mb-5 mt-2 mx-3">
         {% for resenha in resenhas_mais_curtidas %}
         <div class="resenhas-populares col-12 col-lg-6">
-            <div class="rounded-rectangle-resenhas p-4">
+            <div class="rounded-rectangle-resenhas p-4 mt-3">
                 <div class="perfil-user d-flex align-items-start">
                     <div class="px-2">
                         <div class="img-user m-1">
@@ -157,12 +157,19 @@
                     </div>
                 </div>
                 <div class="d-flex py-2">
+                    {% if resenha.livro.capa_url %}
                     <img src="{{ resenha.livro.capa_url }}" alt="Capa do Livro">
+                    {% else %}
+                    <div class="sem-capa-populares p-1">
+                        <p>CAPA INDISPONÍVEL</p>
+                    </div>
+                    {% endif%}
                     <div class="resenha-livro-curtidas ml-3">
                         <p>{{resenha.texto}}</p>
                     </div>
                 </div>
                 <div class="d-flex justify-content-end">
+                    <a href="{% url 'ver_livros' resenha.livro.isbn %}" class="btn btn-ver-mais">Ver mais</a>
                 </div>
             </div>
         </div>
