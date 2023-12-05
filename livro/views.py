@@ -131,7 +131,7 @@ def home(request):
 
         # Calcule a média das avaliações para cada livro
         livros = Livros.objects.annotate(avaliacao_media=Avg('resenha__avaliacao'))
-        livros = livros.order_by('-avaliacao_media')
+        livros = livros.order_by('avaliacao_media')
         
         # Obtem os 10 melhores
         melhores_livros = livros[:10]
@@ -408,14 +408,14 @@ def excluir_livro_lista(request, isbn, id):
             return redirect('minhas_listas')
 
 def atualizar_melhores_resenhas():
-    resenhas_mais_curtidas = Resenha.objects.all().order_by('-curtidas')[:10]
+    resenhas_mais_curtidas = Resenha.objects.all().order_by('-curtidas')[:6]
     data_atual = datetime.now().date()
 
     for resenha in resenhas_mais_curtidas:
         if (resenha.data_final is None) or (resenha.data_final <= data_atual):
             resenha.melhor_resenha += 1
             resenha.data_atual = data_atual
-            resenha.data_final = data_atual + timedelta(days=2)
+            resenha.data_final = data_atual + timedelta(days=7)
             resenha.save()
 
 def minhas_resenhas(request):

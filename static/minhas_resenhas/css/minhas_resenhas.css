@@ -54,6 +54,15 @@ button {
     height: 150px;
 }
 
+.sem-capa{
+    width: 100px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    background-color: #cfcfcf;
+    text-align: center;
+}
+
 .rounded-rectangle-resenhas p {
     font-size: .9em;
 }
