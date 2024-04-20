@@ -14,8 +14,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', "secret_key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', True)
-ALLOWED_HOSTS = [".onrender.com"]
-#ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = [".onrender.com"]
+ALLOWED_HOSTS = []
 #Application definition
 
 INSTALLED_APPS = [
@@ -120,6 +120,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = config('EMAIL_HOST')

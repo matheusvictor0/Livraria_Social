@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Home {% endblock %}
+
+{% block 'menu' %}
+{% include 'menu.html' %}
+{% endblock %}
+
+{% block 'content' %}
+
+{% block head %}
+
+{% endblock %}
+
+<div class="container my-5 d-flex flex-column justify-content-center align-items-center">
+    <h4>Olá, {{usuario.nome}}!</h4>
+    <div class="img-perfil d-flex align-items-center justify-content-center" style="width: 150px; height: 150px; border-radius: 50%; background-color: #ccc;">
+        <i class='bx bxs-user' style="color: #fff; font-size: 82px;"></i>
+    </div>
+
+    <form action="{% url 'perfil' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <input type="file" name="img_perfil">
+        <input type="submit" value="enviar">
+
+    </form>
+
+    <div class="form-group w-50 mt-4">
+        <label for="Nome" class="mr-auto">Nome</label>
+        <div class="d-flex input-edit">
+            <input name="nome" type="text" class="border-0 form-control form-control-md fs-6"
+                placeholder="{{usuario.nome}}" disabled>
+            <button class="btn-editar mr-2" type="submit"
+                style="color: var(--orange-dark); padding-inline: 10px; border: none; font-size: 20px; background-color: transparent;">
+                <i class='bx bx-pencil'></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="form-group w-50">
+        <label for="senha" class="mr-auto">Senha</label>
+        <div class="d-flex input-edit">
+            <input name="senha" type="password" class="border-0 form-control form-control-md fs-6"
+                value="{{usuario.senha}}" disabled>
+            <button class="btn-editar mr-2" type="submit"
+                style="color: var(--orange-dark); padding-inline: 10px; border: none; font-size: 20px; background-color: transparent;">
+                <i class='bx bx-pencil'></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="form-group w-50">
+        <label for="email" class="mr-auto">Email</label>
+        <input name="email" type="email" class="input-email form-control form-control-md fs-6"
+            placeholder="{{usuario.email}}" disabled>
+    </div>
+
+    <button class="btn-delete mt-4" id="open-modal">Deletar conta</button>
+
+    <div class="modal-deletar-conta">
+        <div id="fade" class="hide"></div>
+        <div id="modal" class="hide">
+            <div class="modal-header">
+                <div class="left-header">
+                    <i class='bx bx-error alert-danger'></i>
+                    <h5 class="text-start">Deletar conta</h5>
+                </div>
+                <div class="right-header">
+                    <button id="close-modal"><i class='bx bx-x'></i></button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja deletar esta conta?</p>
+            </div>
+            <div class="btn-modal d-flex justify-content-end mb-3">
+                <button class="btn" id="cancelar-modal">Cancelar</button>
+                <form action="{% url 'deletar_conta' usuario.id %}" method="POST" id="excluir-conta-form">
+                    {% csrf_token %}
+                    <button class="btn" type="submit" id="confirmar-modal">Deletar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .input-email,
+    .input-edit {
+        border: none;
+        border-radius: 20px;
+        border: 1px solid var(--orange-light);
+        background-color: #F8F9FA !important;
+
+    }
+
+    .input-edit input {
+        border-radius: 20px;
+        background-color: #F8F9FA !important;
+    }
+
+    .alterar-senha {
+        color: var(--orange-dark);
+    }
+
+    .alterar-senha:hover {
+        color: var(--orange-light);
+    }
+
+    .btn-delete {
+        border: none;
+        border-radius: 20px;
+        background-color: #EA2617;
+        color: white;
+        padding: 5px 10px 5px 10px;
+        font-size: 1em;
+    }
+
+    /* MODAL DELETAR CONTA */
+    .btn:focus {
+        border-color: none;
+        box-shadow: none;
+    }
+
+    #cancelar-modal {
+        border: 1px solid #000;
+        border-radius: 10px;
+    }
+
+    #confirmar-modal {
+        border-radius: 10px;
+        background-color: #EA2617;
+        color: #fff;
+        margin-left: .8rem;
+    }
+
+    #confirmar-modal:hover {
+        background-color: #c92216;
+    }
+
+    #close-modal {
+        cursor: pointer;
+        opacity: 0.9;
+        font-size: 1.5rem;
+        color: #888;
+        border: none;
+        background: transparent;
+    }
+
+    button:hover {
+        opacity: 1;
+    }
+
+    #fade {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 5;
+    }
+
+    #modal {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 500px;
+        max-width: 90%;
+        background-color: #fff;
+        padding: 1.2rem;
+        border-radius: 0.5rem;
+        z-index: 10;
+    }
+
+    #fade,
+    #modal {
+        transition: 0.5s;
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .modal-header {
+        color: #000;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: .5rem;
+        padding-bottom: .5rem;
+    }
+
+    .modal-body p {
+        margin-bottom: .5rem;
+        font-size: 15px;
+
+    }
+
+    #modal.hide,
+    #fade.hide {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    #modal.hide {
+        top: 0;
+    }
+
+    .left-header {
+        display: flex;
+        align-items: center;
+    }
+
+    .left-header h5 {
+        margin-left: 1rem;
+    }
+
+    .left-header i {
+        font-size: 24px;
+        border-radius: 50%;
+        color: #EA2617;
+        padding: 5px;
+        margin-bottom: 5px;
+    }
+
+    .btn-modal {
+        padding-inline: 1.2rem;
+    }
+</style>
+
+<script>
+    const openModalButton = document.querySelector("#open-modal");
+    const closeModalButton = document.querySelector("#close-modal");
+    const cancelModalButton = document.querySelector("#cancelar-modal");
+    const modal = document.querySelector("#modal");
+    const fade = document.querySelector("#fade");
+
+    const toggleModal = () => {
+        modal.classList.toggle("hide");
+        fade.classList.toggle("hide");
+    };
+
+    [openModalButton, closeModalButton, fade, cancelModalButton].forEach((el) => {
+        el.addEventListener("click", () => toggleModal());
+    });
+</script>
+{% endblock %}

@@ -149,3 +149,24 @@ def sair(request):
     request.session.flush()
     return redirect('/auth/login/')
 
+def perfil(request):
+    status = request.GET.get('status')
+    usuario_session = request.session.get('usuario')
+    usuario = Usuario.objects.get(id=usuario_session)
+
+    if request.method == "GET":
+        return render(request, 'perfil.html', {'usuario': usuario, 'status': status})
+    elif request.method == "POST":
+        file = request.FILES.get("img_perfil")
+        img = Usuario.objects.get(id=usuario, imagem_perfil=file)
+        img.save()
+
+
+def deletar_conta(request, id):
+    if request.method == 'POST':  
+        try:
+            usuario = Usuario.objects.get(id=id)
+            usuario.delete()
+            return redirect('/auth/login/?status=5')
+        except Usuario.DoesNotExist:
+            return redirect('perfil')
