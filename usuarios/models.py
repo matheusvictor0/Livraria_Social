@@ -3,6 +3,7 @@ from django.db import models
 class Usuario(models.Model):
     nome = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
+    #imagem_perfil = models.FileField(upload_to="img")
     senha = models.CharField(max_length=64)
     #token de redefinição de senha
     token_confirmacao = models.CharField(max_length=100, null=True, blank=True)
