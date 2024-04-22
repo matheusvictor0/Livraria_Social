@@ -8,6 +8,7 @@ from .models import Livros, Resenha, Lista_livros, CurtidaResenha, Comentarios_R
 from django.shortcuts import get_object_or_404, redirect
 from decouple import config
 import requests
+from .recommendation_rules import recomendar_livros, usuarioInteragiu
 
 def buscar_dados_livro(query):
     api_key = config('API_KEY_LIVRO')
@@ -133,14 +134,20 @@ def home(request):
         livros = Livros.objects.annotate(avaliacao_media=Avg('resenha__avaliacao'))
         livros = livros.order_by('avaliacao_media')
         
-        # Obtem os 10 melhores
-        melhores_livros = livros[:10]
+        livros_recomendados = []
+        if usuarioInteragiu(usuario):
+            # Recomendar livros de acordo com as interações do usuario
+            livros_recomendados = recomendar_livros(usuario_id)
+        else:
+            # Obtem os 10 melhores
+            livros_recomendados = livros[:10]
 
         #Obtem as resenhas mais curtidas
         resenhas_mais_curtidas = Resenha.objects.all().order_by('-curtidas')[:10]
 
         return render(request, 'home.html', {'categoria_livro': categorias, 'livros': livros, 'usuario_logado': usuario, 
-                                             'melhores_livros': melhores_livros, 'resenhas_mais_curtidas': resenhas_mais_curtidas})
+                                             'livros_recomendados': livros_recomendados, 'resenhas_mais_curtidas': resenhas_mais_curtidas,
+                                             })
     except Usuario.DoesNotExist:
         return redirect(f'/auth/login/?status=4')
 

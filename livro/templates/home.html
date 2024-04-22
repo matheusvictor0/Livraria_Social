@@ -103,7 +103,7 @@
                 data-slide="nav-previous-button"></button>
             <button class="slide-nav-button slide-nav-next fas fa-chevron-right" data-slide="nav-next-button"></button>
             <div class="slide-list" data-slide="list">
-                {% for livro in melhores_livros %}
+                {% for livro in livros_recomendados %}
                 <div class="slide-item" data-slide="item" data-index="{{ forloop.counter }}">
                     <div class="slide-content slide-{{ forloop.counter }}">
                         <div class="img-left">
