@@ -147,20 +147,22 @@
 
 .slide-content.slide-1,
 .slide-content.slide-4,
-.slide-content.slide-7 {
+.slide-content.slide-7,
+.slide-content.slide-10{
     background: linear-gradient(to bottom right, #e47f83, #c76e71);
 }
 
 .slide-content.slide-2,
 .slide-content.slide-5,
 .slide-content.slide-8,
-.slide-content.slide-10{
+.slide-content.slide-11{
     background: linear-gradient(to bottom right, #ebcf8f, #c0aa76);
 }
 
 .slide-content.slide-3,
 .slide-content.slide-6,
-.slide-content.slide-9 {
+.slide-content.slide-9,
+.slide-content.slide-12{
     background: linear-gradient(to bottom right, #a8c99e, #8faa87);
 }
 
