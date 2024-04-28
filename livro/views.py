@@ -143,7 +143,9 @@ def home(request):
             livros_recomendados = livros[:10]
 
         #Obtem as resenhas mais curtidas
-        resenhas_mais_curtidas = Resenha.objects.all().order_by('-curtidas')[:10]
+        
+        #resenhas_mais_curtidas = Resenha.objects.all().order_by('-curtidas')[:10]
+        resenhas_mais_curtidas = Resenha.objects.all().exclude(texto="").order_by('-curtidas')[:6]
 
         return render(request, 'home.html', {'categoria_livro': categorias, 'livros': livros, 'usuario_logado': usuario, 
                                              'livros_recomendados': livros_recomendados, 'resenhas_mais_curtidas': resenhas_mais_curtidas,
@@ -431,7 +433,7 @@ def minhas_resenhas(request):
 
     atualizar_melhores_resenhas()
 
-    resenhas = Resenha.objects.filter(usuario_id = usuario)
+    resenhas = Resenha.objects.filter(usuario_id = usuario).exclude(texto="")
     
     total_resenhas = resenhas.count()
 

@@ -1,7 +1,7 @@
 from .models import Lista_livros, Resenha, Livros
 from collections import Counter
 
-def recomendar_por_favoritos(usuario):
+def filtrar_por_favoritos(usuario):
     livros_favoritos = Lista_livros.objects.get(nome_lista="Favoritos", usuario_id=usuario).livros.all()
     
     generos = []
@@ -14,7 +14,7 @@ def recomendar_por_favoritos(usuario):
     
     return generos, autores
         
-def recomendar_por_livros_salvos(usuario):
+def filtrar_por_livros_salvos(usuario):
     listas_livros_salvos = Lista_livros.objects.filter(usuario_id=usuario).exclude(nome_lista="Favoritos")
 
     generos = []
@@ -31,7 +31,7 @@ def recomendar_por_livros_salvos(usuario):
         
     return generos, autores
 
-def filtrar_livros(lista, campo, usuario):
+def filtrar_generos_autores(lista, campo, usuario):
     cont_itens = Counter(lista)
     top_itens = [item for item, _ in cont_itens.most_common(3)]
 
@@ -63,17 +63,15 @@ def filtrar_livros(lista, campo, usuario):
     return livros_recomendados
 
 def recomendar_livros(usuario):
-    generos = [] 
-    autores = []
-    generos_favoritos, autores_favoritos = recomendar_por_favoritos(usuario)
-    generos_salvos, autores_salvos = recomendar_por_livros_salvos(usuario)
+    generos_favoritos, autores_favoritos = filtrar_por_favoritos(usuario)
+    generos_salvos, autores_salvos = filtrar_por_livros_salvos(usuario)
 
     # Combinar todos os gêneros e autores
     generos = generos_favoritos + generos_salvos
     autores = autores_favoritos + autores_salvos
 
-    livros_recomendados_genero = filtrar_livros(generos, "genero", usuario)
-    livros_recomendados_autor = filtrar_livros(autores, "autor", usuario)
+    livros_recomendados_genero = filtrar_generos_autores(generos, "genero", usuario)
+    livros_recomendados_autor = filtrar_generos_autores(autores, "autor", usuario)
 
     livros_recomendados = list(set(livros_recomendados_genero + livros_recomendados_autor))
 
@@ -83,7 +81,6 @@ def usuarioInteragiu(usuario):
     livro_em_lista = Lista_livros.objects.filter(usuario_id=usuario).exists()
     livro_com_resenha = Resenha.objects.filter(usuario_id=usuario).exists()
 
-    if livro_em_lista or livro_com_resenha:
-        return True
+    return livro_em_lista or livro_com_resenha
     
     
